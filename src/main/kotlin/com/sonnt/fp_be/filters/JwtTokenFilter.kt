@@ -6,6 +6,7 @@ import com.auth0.jwt.exceptions.JWTVerificationException
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.sonnt.fp_be.model.dto.response.BaseResponse
 import com.sonnt.fp_be.utils.JwtUtils
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
@@ -17,7 +18,7 @@ import javax.servlet.FilterChain
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
-class JwtTokenFilter: OncePerRequestFilter() {
+class JwtTokenFilter(private val jwtUtils: JwtUtils): OncePerRequestFilter() {
     private val shouldNotFilterPaths = listOf(
         "/auth/login",
         "/auth/register"
@@ -35,7 +36,19 @@ class JwtTokenFilter: OncePerRequestFilter() {
 
         val authHeader = request.getHeader(HttpHeaders.AUTHORIZATION)
         if(authHeader != null && authHeader.startsWith("Bearer ")) {
-            try {
+            val jwt = authHeader.substring("Bearer ".length)
+            val securityAuthToken = jwtUtils.getSecurityAuthToken(jwt)
+
+            if (securityAuthToken != null) {
+                SecurityContextHolder.getContext().authentication = securityAuthToken
+                filterChain.doFilter(request, response)
+            } else {
+                response.status = HttpStatus.UNAUTHORIZED.value()
+                response.contentType = MediaType.APPLICATION_JSON_VALUE
+                ObjectMapper().writeValue(response.outputStream, BaseResponse(code = -1, msg = "MSG_INVALID_TOKEN"))
+            }
+
+            /*try {
                 val jwtToken = authHeader.substring("Bearer ".length)
                 val verifier = JWT.require(Algorithm.HMAC256(JwtUtils.SECRET.toByteArray())).build()
                 val decodedJwt = verifier.verify(jwtToken)
@@ -44,15 +57,14 @@ class JwtTokenFilter: OncePerRequestFilter() {
                 val authorities = listOf(SimpleGrantedAuthority("USER"))
                 val authToken = UsernamePasswordAuthenticationToken(username, null, authorities)
                 authToken.details = userId
-                SecurityContextHolder.getContext().authentication = authToken
-                filterChain.doFilter(request, response)
+
             }
             catch (e: JWTVerificationException) {
                 e.printStackTrace()
                 response.status = HttpStatus.UNAUTHORIZED.value()
                 response.contentType = MediaType.APPLICATION_JSON_VALUE
                 ObjectMapper().writeValue(response.outputStream, BaseResponse(code = -1, msg = "MSG_INVALID_TOKEN"))
-            }
+            }*/
         }
         else {
             filterChain.doFilter(request, response)

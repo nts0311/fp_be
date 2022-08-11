@@ -29,6 +29,10 @@ dependencies {
     implementation("com.auth0:java-jwt:4.0.0")
     implementation("org.modelmapper:modelmapper:3.1.0")
     implementation("com.google.firebase:firebase-admin:9.0.0")
+
+    implementation ("org.springframework.boot:spring-boot-starter-websocket")
+    implementation ("org.webjars:stomp-websocket:2.3.4")
+    implementation("org.springframework.security:spring-security-messaging:5.7.2")
 }
 
 tasks.withType<KotlinCompile> {

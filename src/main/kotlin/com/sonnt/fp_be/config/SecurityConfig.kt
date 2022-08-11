@@ -1,7 +1,8 @@
-package com.sonnt.fp_be.security
+package com.sonnt.fp_be.config
 
 import com.sonnt.fp_be.filters.ExceptionFilter
 import com.sonnt.fp_be.filters.JwtTokenFilter
+import com.sonnt.fp_be.utils.JwtUtils
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -25,6 +26,9 @@ class SecurityConfig(): WebSecurityConfigurerAdapter() {
     @Autowired
     lateinit var passwordEncoder: PasswordEncoder
 
+    @Autowired
+    lateinit var jwtUtils: JwtUtils
+
     override fun configure(auth: AuthenticationManagerBuilder?) {
         auth?.userDetailsService(userDetailsService)?.passwordEncoder(passwordEncoder)
     }
@@ -35,9 +39,10 @@ class SecurityConfig(): WebSecurityConfigurerAdapter() {
             sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             authorizeRequests().antMatchers("/auth/login/**").permitAll()
             authorizeRequests().antMatchers("/auth/register/**").permitAll()
+            authorizeRequests().antMatchers("/stomp").permitAll()
             authorizeRequests().anyRequest().authenticated()
             addFilterBefore(ExceptionFilter(), UsernamePasswordAuthenticationFilter::class.java)
-            addFilterBefore(JwtTokenFilter(), UsernamePasswordAuthenticationFilter::class.java)
+            addFilterBefore(JwtTokenFilter(jwtUtils), UsernamePasswordAuthenticationFilter::class.java)
         }
     }
 

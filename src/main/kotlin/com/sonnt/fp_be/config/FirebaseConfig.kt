@@ -1,6 +1,4 @@
 package com.sonnt.fp_be.config
-
-
 import com.google.auth.oauth2.GoogleCredentials
 import com.google.firebase.FirebaseApp
 import com.google.firebase.FirebaseOptions
@@ -12,8 +10,6 @@ import org.springframework.context.annotation.DependsOn
 import org.springframework.core.io.Resource
 import java.io.IOException
 import java.io.InputStream
-
-
 @Configuration
 class FirebaseConfig {
     //TODO: In your case maybe something else
