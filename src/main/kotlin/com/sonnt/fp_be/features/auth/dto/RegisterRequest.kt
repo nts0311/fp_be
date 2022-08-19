@@ -1,4 +1,4 @@
-package com.sonnt.fp_be.model.dto.request
+package com.sonnt.fp_be.features.auth.dto
 
 data class RegisterRequest(
     val username: String = "",

@@ -45,26 +45,8 @@ class JwtTokenFilter(private val jwtUtils: JwtUtils): OncePerRequestFilter() {
             } else {
                 response.status = HttpStatus.UNAUTHORIZED.value()
                 response.contentType = MediaType.APPLICATION_JSON_VALUE
-                ObjectMapper().writeValue(response.outputStream, BaseResponse(code = -1, msg = "MSG_INVALID_TOKEN"))
+                ObjectMapper().writeValue(response.outputStream, BaseResponse(code = "-1", msg = "MSG_INVALID_TOKEN"))
             }
-
-            /*try {
-                val jwtToken = authHeader.substring("Bearer ".length)
-                val verifier = JWT.require(Algorithm.HMAC256(JwtUtils.SECRET.toByteArray())).build()
-                val decodedJwt = verifier.verify(jwtToken)
-                val username = decodedJwt.subject
-                val userId = decodedJwt.claims["userId"]?.asLong() ?: 0
-                val authorities = listOf(SimpleGrantedAuthority("USER"))
-                val authToken = UsernamePasswordAuthenticationToken(username, null, authorities)
-                authToken.details = userId
-
-            }
-            catch (e: JWTVerificationException) {
-                e.printStackTrace()
-                response.status = HttpStatus.UNAUTHORIZED.value()
-                response.contentType = MediaType.APPLICATION_JSON_VALUE
-                ObjectMapper().writeValue(response.outputStream, BaseResponse(code = -1, msg = "MSG_INVALID_TOKEN"))
-            }*/
         }
         else {
             filterChain.doFilter(request, response)

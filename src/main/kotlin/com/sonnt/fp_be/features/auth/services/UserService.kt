@@ -1,4 +1,4 @@
-package com.sonnt.fp_be.services
+package com.sonnt.fp_be.features.auth.services
 
 import com.sonnt.fp_be.model.entities.AppUser
 import com.sonnt.fp_be.repos.AppUserRepo

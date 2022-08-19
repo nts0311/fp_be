@@ -24,7 +24,7 @@ class ExceptionFilter : OncePerRequestFilter() {
                 response.outputStream,
                 BaseResponse(
                     httpStatus = HttpStatus.INTERNAL_SERVER_ERROR.value(),
-                    code = -1,
+                    code = "-1",
                     msg = e.cause?.message ?: "An error occurred"
                 )
             )
