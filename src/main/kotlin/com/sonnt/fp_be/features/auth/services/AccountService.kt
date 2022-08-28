@@ -1,7 +1,7 @@
 package com.sonnt.fp_be.features.auth.services
 
-import com.sonnt.fp_be.model.entities.AppUser
-import com.sonnt.fp_be.repos.AppUserRepo
+import com.sonnt.fp_be.model.entities.Account
+import com.sonnt.fp_be.repos.AccountRepo
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.User
@@ -12,43 +12,32 @@ import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 
 @Service
-class UserService: UserDetailsService {
+class AccountService: UserDetailsService {
     @Autowired
-    lateinit var userRepo: AppUserRepo
-    @Autowired
-    lateinit var passwordEncoder: PasswordEncoder
+    lateinit var accountRepo: AccountRepo
 
     override fun loadUserByUsername(username: String?): UserDetails {
         if(username != null){
             val user = getUserByUsername(username) ?: throw UsernameNotFoundException("Username not found")
-            return User(user.username,user.password, listOf(SimpleGrantedAuthority("USER")))
+            return User(user.username,user.password, listOf(SimpleGrantedAuthority(user.role)))
         }
         throw UsernameNotFoundException("username null")
     }
 
-    fun getUserByUsername(username: String): AppUser? = userRepo.findByUsername(username)
+    fun getUserByUsername(username: String): Account? = accountRepo.findByUsername(username)
 
-    fun saveUser(user: AppUser) {
-        user.password = passwordEncoder.encode(user.password)
-        userRepo.save(user)
-    }
-
-    fun getAllUser(): List<AppUser> = userRepo.findAll()
+    fun getAllUser(): List<Account> = accountRepo.findAll()
 
     fun getFcmToken(userId: Long): String {
-        return userRepo.getById(userId).fcmToken
+        return accountRepo.getById(userId).fcmToken
     }
 
     fun isUserExist(username: String): Boolean = getUserByUsername(username) != null
-    fun isUserExist(userId: Long): Boolean = !userRepo.findById(userId).isEmpty
-
-    fun flush() {
-        userRepo.flush()
-    }
+    fun isUserExist(userId: Long): Boolean = !accountRepo.findById(userId).isEmpty
 
     fun updateFcmToken(userId: Long, fcmToken: String) {
-        val user = userRepo.getById(userId)
+        val user = accountRepo.getById(userId)
         user.fcmToken = fcmToken
-        userRepo.save(user)
+        accountRepo.save(user)
     }
 }

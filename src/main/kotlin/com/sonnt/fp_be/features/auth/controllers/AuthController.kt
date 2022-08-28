@@ -5,7 +5,8 @@ import com.sonnt.fp_be.features.auth.dto.AuthRequest
 import com.sonnt.fp_be.features.auth.dto.RegisterRequest
 import com.sonnt.fp_be.model.dto.request.UpdateFcmTokenRequest
 import com.sonnt.fp_be.features.auth.dto.AuthenticationResponse
-import com.sonnt.fp_be.model.entities.AppUser
+import com.sonnt.fp_be.features.auth.services.CustomerService
+import com.sonnt.fp_be.model.entities.Account
 import com.sonnt.fp_be.utils.JwtUtils
 import com.sonnt.fp_be.utils.badRequest
 import com.sonnt.fp_be.utils.ok
@@ -21,14 +22,15 @@ import org.springframework.web.bind.annotation.*
 @RequestMapping("/auth")
 class AuthController @Autowired constructor(
     val authenticationManager: AuthenticationManager,
-    val jwtUtils: JwtUtils
+    val jwtUtils: JwtUtils,
+    val customerService: CustomerService
 ) : BaseController() {
     @PostMapping("login")
     fun login(@RequestBody authRequest: AuthRequest): ResponseEntity<*> {
         return try {
             val authToken = UsernamePasswordAuthenticationToken(authRequest.username, authRequest.password)
             authenticationManager.authenticate(authToken)
-            val user = userService.getUserByUsername(authRequest.username)
+            val user = accountService.getUserByUsername(authRequest.username)
             val jwtToken = jwtUtils.generateToken(user!!)
             ok(AuthenticationResponse(jwtToken, user.id))
         }
@@ -37,21 +39,20 @@ class AuthController @Autowired constructor(
         }
     }
 
-    @PostMapping("register")
-    fun register(@RequestBody registerRequest: RegisterRequest): ResponseEntity<*> {
-        if (userService.isUserExist(registerRequest.username))
+    @PostMapping("customer/register")
+    fun registerCustomer(@RequestBody registerRequest: RegisterRequest): ResponseEntity<*> {
+        if (accountService.isUserExist(registerRequest.username))
             return badRequest("MSG_USER_EXIST")
 
-        val newUser = modelMapper.map(registerRequest, AppUser::class.java)
-        userService.saveUser(newUser)
-        userService.flush()
+        val newUser = modelMapper.map(registerRequest, Account::class.java)
+        customerService.registerCustomer(newUser)
 
         return ok()
     }
 
     @PostMapping("update-fcm-token")
     fun updateFcmToken(@RequestBody body: UpdateFcmTokenRequest): ResponseEntity<*> {
-        userService.updateFcmToken(userId, body.fcmToken)
+        accountService.updateFcmToken(userId, body.fcmToken)
         return ok()
     }
 }

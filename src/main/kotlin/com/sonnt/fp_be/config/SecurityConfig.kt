@@ -37,8 +37,7 @@ class SecurityConfig(): WebSecurityConfigurerAdapter() {
         http?.run {
             csrf().disable()
             sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-            authorizeRequests().antMatchers("/auth/login/**").permitAll()
-            authorizeRequests().antMatchers("/auth/register/**").permitAll()
+            authorizeRequests().antMatchers("/auth/**").permitAll()
             authorizeRequests().antMatchers("/stomp").permitAll()
             authorizeRequests().anyRequest().authenticated()
             addFilterBefore(ExceptionFilter(), UsernamePasswordAuthenticationFilter::class.java)
