@@ -3,8 +3,8 @@ package com.sonnt.fp_be.model.entities.product
 import com.sonnt.fp_be.model.entities.Merchant
 import javax.persistence.*
 
-enum class ProductStatus {
-    AVAILABLE, OUT_OF_STOCK
+enum class ProductStatus(val value: String) {
+    AVAILABLE("AVAILABLE"), OUT_OF_STOCK("OUT_OF_STOCK")
 }
 
 @Entity
@@ -43,6 +43,6 @@ class Product(
         name = "tag_id",
         referencedColumnName = "id"
     )
-    var tag: ProductTag = ProductTag()
+    var tag: ProductTag? = null
 ) {
 }

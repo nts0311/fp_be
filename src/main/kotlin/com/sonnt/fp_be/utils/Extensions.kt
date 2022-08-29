@@ -10,6 +10,9 @@ fun badRequest(msg: String = "") =
 fun unauthorized() = ResponseEntity.status(HttpStatus.UNAUTHORIZED)
     .body(BaseResponse(httpStatus = HttpStatus.UNAUTHORIZED.value(), code = "-1", msg = "MSG_INCORRECT_AUTH_INFO"))
 
+fun notFound(message: String = "Not found") = ResponseEntity.status(HttpStatus.NOT_FOUND)
+    .body(BaseResponse(httpStatus = HttpStatus.NOT_FOUND.value(), code = "404", msg = message))
+
 fun ok() = ResponseEntity.ok().body(BaseResponse())
 
 fun ok(body: Any) = ResponseEntity.ok().body(body)

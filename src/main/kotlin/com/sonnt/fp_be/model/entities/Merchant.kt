@@ -15,9 +15,9 @@ class Merchant(
 
     @OneToOne(fetch = FetchType.LAZY, orphanRemoval = true, cascade = [CascadeType.ALL])
     @JoinColumn(name = "address_id")
-    var address: Address = Address(),
+    var address: Address? = null,
 
     @OneToOne(fetch = FetchType.LAZY, mappedBy = "merchant", cascade = [CascadeType.ALL])
-    val stat: MerchantStat = MerchantStat()
+    val stat: MerchantStat? = null
 ) {
 }

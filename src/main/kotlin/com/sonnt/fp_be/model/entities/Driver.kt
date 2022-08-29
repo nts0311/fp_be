@@ -14,9 +14,9 @@ class Driver(
     var account: Account,
 
     @OneToOne(fetch = FetchType.LAZY, mappedBy = "driver", cascade = [CascadeType.ALL])
-    val stat: DriverStat,
+    val stat: DriverStat? = null,
 
     @OneToOne(fetch = FetchType.LAZY, mappedBy = "driver", cascade = [CascadeType.ALL])
-    val lastLocation: LastLocation
+    val lastLocation: LastLocation? = null
 ) {
 }
