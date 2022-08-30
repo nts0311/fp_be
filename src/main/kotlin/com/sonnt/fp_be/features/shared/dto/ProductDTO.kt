@@ -1,8 +1,8 @@
-package com.sonnt.fp_be.features.merchant.product.dto
+package com.sonnt.fp_be.features.merchant.product.response
 
+import com.sonnt.fp_be.model.entities.Merchant
 import com.sonnt.fp_be.model.entities.product.*
 import com.sonnt.fp_be.utils.sharedModelMapper
-import org.jetbrains.annotations.NotNull
 
 data class ProductDTO(
     var id: Long? = null,
@@ -19,9 +19,15 @@ data class ProductDTO(
     fun toDbModel(): Product {
         val attributesDb = attributes.toDbAttributes()
 
-        return sharedModelMapper.map(this, Product::class.java).also {
-            it.attributes = attributesDb
-            it.status = ProductStatus.valueOf(this.status ?: ProductStatus.AVAILABLE.value)
+        return sharedModelMapper.map(this, Product::class.java).also {product ->
+            product.attributes = attributesDb.toMutableList()
+            product.status = ProductStatus.valueOf(this.status ?: ProductStatus.AVAILABLE.value)
+
+            merchantId?.also { product.merchant = Merchant(id = it) }
+
+            categoryId?.also { product.category = ProductCategory(id = it) }
+
+            tagId?.also{ product.tag = ProductTag(id = it) }
         }
     }
 }
@@ -37,7 +43,7 @@ data class ProductAttributeDTO(
     fun toDbModel(): ProductAttribute {
         val optionsDb = options.toDbOptions()
         return sharedModelMapper.map(this, ProductAttribute::class.java).apply {
-            this.options = optionsDb
+            this.options = optionsDb.toMutableList()
         }
     }
 }

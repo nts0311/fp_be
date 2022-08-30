@@ -17,7 +17,7 @@ class OrderRecord(
     var note: String = "",
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "orderItem")
-    var items: List<OrderItem> = listOf(),
+    var items: MutableList<OrderItem> = mutableListOf(),
 
     @OneToOne(fetch = FetchType.LAZY, orphanRemoval = true, cascade = [CascadeType.ALL])
     @JoinColumn(name = "route_info_id")

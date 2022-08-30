@@ -1,6 +1,6 @@
 package com.sonnt.fp_be.exceptions
 
-import com.sonnt.fp_be.model.dto.response.ExceptionResponse
+import com.sonnt.fp_be.features.shared.response.ExceptionResponse
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.ExceptionHandler
@@ -15,6 +15,7 @@ class GlobalExceptionsHandler {
 
     @ExceptionHandler(Exception::class)
     fun handleExceptions(ex: Exception): ResponseEntity<*> {
+        ex.printStackTrace()
        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ExceptionResponse(ex.message ?: "Lỗi hệ thống", ex.stackTrace.toString()))
     }
 }

@@ -1,3 +1,3 @@
-package com.sonnt.fp_be.model.dto.request
+package com.sonnt.fp_be.features.shared.request
 
 data class UpdateFcmTokenRequest(val fcmToken: String = "")

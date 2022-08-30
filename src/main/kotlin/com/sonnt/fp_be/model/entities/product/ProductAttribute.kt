@@ -13,6 +13,6 @@ class ProductAttribute(
 
     @OneToMany(fetch = FetchType.LAZY, cascade = [CascadeType.ALL])
     @JoinColumn(name = "attribute_id")
-    var options: List<ProductAttributeOption> = listOf()
+    var options: MutableList<ProductAttributeOption> = mutableListOf()
 ) {
 }

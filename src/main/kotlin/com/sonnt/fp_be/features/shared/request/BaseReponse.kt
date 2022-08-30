@@ -5,7 +5,7 @@ import org.springframework.http.HttpStatus
 open class BaseResponse(
     var httpStatus: Int = HttpStatus.OK.value(),
     var code: String = "0",
-    var msg: String = "Success",
+    var msg: String = "Thành công",
 ) {
 
 }

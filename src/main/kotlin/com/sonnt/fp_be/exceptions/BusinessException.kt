@@ -9,10 +9,12 @@ enum class FPResponseStatus(val code: String = "0", val httpStatus: HttpStatus =
     ok(httpStatus = HttpStatus.OK),
     notFoung(httpStatus = HttpStatus.NOT_FOUND),
     badRequest(httpStatus = HttpStatus.BAD_REQUEST),
+    unauthorized(httpStatus = HttpStatus.UNAUTHORIZED, message = "Không có quyền"),
 
     merchantNotFound(code = "1", httpStatus = HttpStatus.NOT_FOUND, "Không tìm thấy nhà hàng"),
     categoryNotFound(code = "2", httpStatus = HttpStatus.NOT_FOUND, "Không tìm thấy danh mục"),
-    tagNotFound(code = "3", httpStatus = HttpStatus.NOT_FOUND, "Không tìm thấy tag")
+    tagNotFound(code = "3", httpStatus = HttpStatus.NOT_FOUND, "Không tìm thấy tag"),
+    productNotFound(code = "4", httpStatus = HttpStatus.NOT_FOUND, "Không tìm thấy sản phẩm")
 }
 
 class BusinessException(

@@ -1,6 +1,6 @@
-package com.sonnt.fp_be.features.merchant.product.service
+package com.sonnt.fp_be.features.merchant.tag
 
-import com.sonnt.fp_be.features.base.services.BaseService
+import com.sonnt.fp_be.features.shared.services.BaseService
 import com.sonnt.fp_be.repos.product.ProductTagRepo
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service

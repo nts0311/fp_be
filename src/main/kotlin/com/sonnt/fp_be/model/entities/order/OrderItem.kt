@@ -24,6 +24,6 @@ class OrderItem(
     var product: Product = Product(),
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "orderItem")
-    var attributes: List<OrderItemAttribute> = listOf()
+    var attributes: MutableList<OrderItemAttribute> = mutableListOf()
 ) {
 }

@@ -29,7 +29,7 @@ class Product(
 
     @OneToMany(fetch = FetchType.LAZY, cascade = [CascadeType.ALL])
     @JoinColumn(name = "product_id")
-    var attributes: List<ProductAttribute> = listOf(),
+    var attributes: MutableList<ProductAttribute> = mutableListOf(),
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(

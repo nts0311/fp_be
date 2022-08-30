@@ -1,7 +1,6 @@
 package com.sonnt.fp_be
 
-import com.sonnt.fp_be.features.merchant.product.dto.ProductAttributeDTO
-import com.sonnt.fp_be.features.merchant.product.dto.ProductAttributeOptionDTO
+import com.sonnt.fp_be.features.merchant.product.response.ProductAttributeOptionDTO
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
 

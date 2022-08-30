@@ -1,10 +1,10 @@
-package com.sonnt.fp_be.features.auth.controllers
+package com.sonnt.fp_be.features.auth
 
-import com.sonnt.fp_be.controllers.BaseController
-import com.sonnt.fp_be.features.auth.dto.AuthRequest
-import com.sonnt.fp_be.features.auth.dto.RegisterRequest
-import com.sonnt.fp_be.model.dto.request.UpdateFcmTokenRequest
-import com.sonnt.fp_be.features.auth.dto.AuthenticationResponse
+import com.sonnt.fp_be.features.shared.controllers.BaseController
+import com.sonnt.fp_be.features.auth.response.AuthRequest
+import com.sonnt.fp_be.features.auth.response.RegisterRequest
+import com.sonnt.fp_be.features.shared.request.UpdateFcmTokenRequest
+import com.sonnt.fp_be.features.auth.response.AuthenticationResponse
 import com.sonnt.fp_be.features.auth.services.CustomerService
 import com.sonnt.fp_be.features.auth.services.MerchantAuthService
 import com.sonnt.fp_be.model.entities.Account

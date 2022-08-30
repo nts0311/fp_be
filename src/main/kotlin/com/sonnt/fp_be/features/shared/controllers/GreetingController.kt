@@ -1,4 +1,4 @@
-package com.sonnt.fp_be.controllers
+package com.sonnt.fp_be.features.shared.controllers
 
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.messaging.handler.annotation.MessageMapping

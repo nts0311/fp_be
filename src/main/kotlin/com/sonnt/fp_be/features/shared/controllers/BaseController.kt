@@ -1,4 +1,4 @@
-package com.sonnt.fp_be.controllers
+package com.sonnt.fp_be.features.shared.controllers
 
 import com.sonnt.fp_be.features.auth.services.AccountService
 import org.modelmapper.ModelMapper
