@@ -13,7 +13,7 @@ import java.util.*
 
 @Service
 class JwtUtils {
-    private val EXPRIRE_TIME = 5000
+    private val EXPRIRE_TIME = 120
     private val verifier = JWT.require(Algorithm.HMAC256(SECRET.toByteArray())).build()
 
     fun extractUserId(token: String): Long {

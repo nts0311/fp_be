@@ -1,9 +1,9 @@
 package com.sonnt.fp_be.features.merchant.tag
 
+import com.sonnt.fp_be.features.merchant.product.response.ProductTagListResponse
+import com.sonnt.fp_be.features.merchant.product.response.ProductTagResponse
 import com.sonnt.fp_be.features.shared.controllers.BaseController
-import com.sonnt.fp_be.features.merchant.product.MerchantProductService
-import com.sonnt.fp_be.features.merchant.product.response.ProductDTO
-import com.sonnt.fp_be.features.merchant.product.response.ProductResponse
+import com.sonnt.fp_be.features.shared.dto.ProductTagDTO
 import com.sonnt.fp_be.utils.ok
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
@@ -21,20 +21,25 @@ class MerchantTagController : BaseController() {
         @RequestParam page: Int,
         @RequestParam size: Int
     ): ResponseEntity<*> {
-        return ok()
+        val result = merchantTagService.getMerchantTag(merchantId, page, size)
+        return ok(ProductTagListResponse(page, result.size, result))
     }
 
     @PostMapping("/add")
-    fun addProduct(@RequestBody productDto: ProductDTO): ResponseEntity<*> {
-
-
-        return ok()
+    fun addTag(@RequestBody productDto: ProductTagDTO): ResponseEntity<*> {
+        val result = merchantTagService.addTag(productDto)
+        return ok(ProductTagResponse(result))
     }
 
     @PostMapping("/edit")
-    fun editProduct(@RequestBody productDto: ProductDTO): ResponseEntity<*> {
+    fun editTag(@RequestBody productDto: ProductTagDTO): ResponseEntity<*> {
+        merchantTagService.updateTag(productDto)
+        return ok()
+    }
 
-
+    @GetMapping("/delete")
+    fun deleteTag(@RequestParam tagId: Long): ResponseEntity<*> {
+        merchantTagService.deleteTag(tagId)
         return ok()
     }
 }

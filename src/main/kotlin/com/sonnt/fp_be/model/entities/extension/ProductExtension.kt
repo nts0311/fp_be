@@ -3,9 +3,11 @@ package com.sonnt.fp_be.model.entities.extension
 import com.sonnt.fp_be.features.merchant.product.response.ProductAttributeDTO
 import com.sonnt.fp_be.features.merchant.product.response.ProductAttributeOptionDTO
 import com.sonnt.fp_be.features.merchant.product.response.ProductDTO
+import com.sonnt.fp_be.features.shared.dto.ProductTagDTO
 import com.sonnt.fp_be.model.entities.product.Product
 import com.sonnt.fp_be.model.entities.product.ProductAttribute
 import com.sonnt.fp_be.model.entities.product.ProductAttributeOption
+import com.sonnt.fp_be.model.entities.product.ProductTag
 import com.sonnt.fp_be.utils.sharedModelMapper
 
 fun ProductAttributeOption.toDTO(): ProductAttributeOptionDTO {
@@ -23,9 +25,7 @@ fun ProductAttribute.toDTO(): ProductAttributeDTO {
     }
 }
 
-fun List<ProductAttribute>.toAttributeDTO(): List<ProductAttributeDTO> {
-    return this.map { it.toDTO() }
-}
+fun List<ProductAttribute>.toAttributeDTO() = this.map { it.toDTO() }
 
 fun Product.toDTO(): ProductDTO {
     return sharedModelMapper.map(this, ProductDTO::class.java).also { productDTO ->
@@ -37,6 +37,12 @@ fun Product.toDTO(): ProductDTO {
     }
 }
 
-fun List<Product>.toProductDTO(): List<ProductDTO> {
-    return this.map { it.toDTO() }
+fun List<Product>.toProductDTO() = this.map { it.toDTO() }
+
+fun ProductTag.toDTO(): ProductTagDTO {
+    return sharedModelMapper.map(this, ProductTagDTO::class.java).apply {
+        this.merchantId = merchant.id
+    }
 }
+
+fun List<ProductTag>.toProductTagDTO() = this.map { it.toDTO() }
