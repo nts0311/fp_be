@@ -11,8 +11,7 @@ class ProductCategory(
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     var id: Long = 0,
-
     var name: String = "",
-    var imageUrl: String = ""
+    var imageUrl: String? = null
 ) {
 }

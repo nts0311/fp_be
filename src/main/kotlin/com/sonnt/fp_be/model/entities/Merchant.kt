@@ -18,6 +18,10 @@ class Merchant(
     var address: Address? = null,
 
     @OneToOne(fetch = FetchType.LAZY, mappedBy = "merchant", cascade = [CascadeType.ALL])
-    val stat: MerchantStat? = null
+    val stat: MerchantStat? = null,
+
+    val subTitle: String? = null,
+    val description: String? = null,
+    val imageUrl: String? = null
 ) {
 }
