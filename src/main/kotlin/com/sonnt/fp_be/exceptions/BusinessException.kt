@@ -14,7 +14,10 @@ enum class FPResponseStatus(val code: String = "0", val httpStatus: HttpStatus =
     merchantNotFound(code = "1", httpStatus = HttpStatus.NOT_FOUND, "Không tìm thấy nhà hàng"),
     categoryNotFound(code = "2", httpStatus = HttpStatus.NOT_FOUND, "Không tìm thấy danh mục"),
     tagNotFound(code = "3", httpStatus = HttpStatus.NOT_FOUND, "Không tìm thấy tag"),
-    productNotFound(code = "4", httpStatus = HttpStatus.NOT_FOUND, "Không tìm thấy sản phẩm")
+    productNotFound(code = "4", httpStatus = HttpStatus.NOT_FOUND, "Không tìm thấy sản phẩm"),
+
+    usernameNotFound(code = "5", httpStatus = HttpStatus.BAD_REQUEST, "Sai tên đăng nhập"),
+    incorrectPassword(code = "6", httpStatus = HttpStatus.BAD_REQUEST, "Sai mật khẩu")
 }
 
 class BusinessException(

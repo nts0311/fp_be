@@ -1,6 +1,5 @@
 package com.sonnt.fp_be.model.entities
 
-import java.util.StringJoiner
 import javax.persistence.Entity
 import javax.persistence.GeneratedValue
 import javax.persistence.GenerationType
@@ -18,6 +17,6 @@ class Address(
     var city: String = "",
     var detail: String = "",
     var lat: Double = 0.0,
-    var lon: Double = 0.0
+    var long: Double = 0.0
 ) {
 }

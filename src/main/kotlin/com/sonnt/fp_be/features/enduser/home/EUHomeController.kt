@@ -1,8 +1,10 @@
 package com.sonnt.fp_be.features.enduser.home
 
-import com.sonnt.fp_be.features.enduser.home.request.GetHomeInfoRequest
-import com.sonnt.fp_be.features.enduser.home.response.GetHomeInfoResponse
+import com.sonnt.fp_be.features.enduser.home.request.GetNearbyMerchantRequest
+import com.sonnt.fp_be.features.enduser.home.response.GetHomeSectionResponse
+import com.sonnt.fp_be.features.enduser.home.response.NearByMerchantResponse
 import com.sonnt.fp_be.features.shared.controllers.BaseController
+import com.sonnt.fp_be.features.shared.model.Cord
 import com.sonnt.fp_be.utils.ok
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
@@ -14,11 +16,17 @@ class EUHomeController: BaseController() {
 
     @Autowired lateinit var euHomeService: EUHomeService
 
-    @PostMapping("info")
-    fun getHomeInfo(@RequestBody request: GetHomeInfoRequest): ResponseEntity<*> {
-        val homeInfo = euHomeService.getHomeInfo(request)
-        val responseBody = modelMapper.map(homeInfo, GetHomeInfoResponse::class.java)
+    @GetMapping("section")
+    fun getHomeInfo(): ResponseEntity<*> {
+        val sections = euHomeService.getHomeSection()
+        return ok(GetHomeSectionResponse(sections))
+    }
 
-        return ok(responseBody)
+    @PostMapping("nearby-merchant")
+    fun getNearbyMerchant(@RequestBody request: GetNearbyMerchantRequest): ResponseEntity<*> {
+        val cord = Cord(request.lat, request.long)
+        val merchants = euHomeService.getNearbyMerchant(cord)
+
+        return ok(NearByMerchantResponse(merchants))
     }
 }

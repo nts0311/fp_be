@@ -1,5 +1,7 @@
 package com.sonnt.fp_be.features.auth
 
+import com.sonnt.fp_be.exceptions.BusinessException
+import com.sonnt.fp_be.exceptions.FPResponseStatus
 import com.sonnt.fp_be.features.shared.controllers.BaseController
 import com.sonnt.fp_be.features.auth.response.AuthRequest
 import com.sonnt.fp_be.features.auth.response.RegisterRequest
@@ -29,15 +31,19 @@ class AuthController @Autowired constructor(
 ) : BaseController() {
     @PostMapping("login")
     fun login(@RequestBody authRequest: AuthRequest): ResponseEntity<*> {
-        return try {
+        if (!accountService.isUserExist(authRequest.username)) {
+            throw BusinessException(FPResponseStatus.usernameNotFound)
+        }
+
+        try {
             val authToken = UsernamePasswordAuthenticationToken(authRequest.username, authRequest.password)
             authenticationManager.authenticate(authToken)
             val user = accountService.getUserByUsername(authRequest.username)
             val jwtToken = jwtUtils.generateToken(user!!)
-            ok(AuthenticationResponse(jwtToken, user.id))
+            return ok(AuthenticationResponse(jwtToken, user.id))
         }
         catch (e: BadCredentialsException){
-            unauthorized()
+            throw BusinessException(FPResponseStatus.incorrectPassword)
         }
     }
 

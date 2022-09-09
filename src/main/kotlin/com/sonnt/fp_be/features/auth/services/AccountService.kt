@@ -1,8 +1,18 @@
 package com.sonnt.fp_be.features.auth.services
 
+import com.sonnt.fp_be.exceptions.BusinessException
+import com.sonnt.fp_be.exceptions.FPResponseStatus
+import com.sonnt.fp_be.features.auth.response.AuthRequest
+import com.sonnt.fp_be.features.auth.response.AuthenticationResponse
 import com.sonnt.fp_be.model.entities.Account
 import com.sonnt.fp_be.repos.AccountRepo
+import com.sonnt.fp_be.utils.JwtUtils
+import com.sonnt.fp_be.utils.ok
+import com.sonnt.fp_be.utils.unauthorized
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.security.authentication.AuthenticationManager
+import org.springframework.security.authentication.BadCredentialsException
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.User
 import org.springframework.security.core.userdetails.UserDetails
@@ -13,8 +23,7 @@ import org.springframework.stereotype.Service
 
 @Service
 class AccountService: UserDetailsService {
-    @Autowired
-    lateinit var accountRepo: AccountRepo
+    @Autowired lateinit var accountRepo: AccountRepo
 
     override fun loadUserByUsername(username: String?): UserDetails {
         if(username != null){

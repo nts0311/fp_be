@@ -45,7 +45,7 @@ class JwtTokenFilter(private val jwtUtils: JwtUtils): OncePerRequestFilter() {
             } else {
                 response.status = HttpStatus.UNAUTHORIZED.value()
                 response.contentType = MediaType.APPLICATION_JSON_VALUE
-                ObjectMapper().writeValue(response.outputStream, BaseResponse(code = "-1", msg = "MSG_INVALID_TOKEN"))
+                ObjectMapper().writeValue(response.outputStream, BaseResponse(httpStatus = HttpStatus.UNAUTHORIZED.value(), code = "-1", msg = "MSG_INVALID_TOKEN"))
             }
         }
         else {
