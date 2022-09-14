@@ -1,5 +1,6 @@
 package com.sonnt.fp_be.features.merchant.product.response
 
+import com.sonnt.fp_be.features.shared.dto.ProductDTO
 import com.sonnt.fp_be.model.dto.response.BaseResponse
 
 class ProductListResponse(

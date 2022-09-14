@@ -1,4 +1,4 @@
-package com.sonnt.fp_be.features.merchant.product.response
+package com.sonnt.fp_be.features.shared.dto
 
 import com.sonnt.fp_be.model.entities.Merchant
 import com.sonnt.fp_be.model.entities.product.*

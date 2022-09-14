@@ -32,7 +32,8 @@ class JwtUtils {
             val decodedJwt = verifier.verify(jwt)
             val username = decodedJwt.subject
             val userId = decodedJwt.claims["userId"]?.asLong() ?: 0
-            val authorities = listOf(SimpleGrantedAuthority("USER"))
+            val userRole = decodedJwt.claims["role"]?.asString() ?: ""
+            val authorities = listOf(SimpleGrantedAuthority("ROLE_$userRole"))
             val authToken = UsernamePasswordAuthenticationToken(username, null, authorities)
             authToken.details = userId
 
@@ -47,6 +48,7 @@ class JwtUtils {
         return JWT.create()
             .withSubject(user.username)
             .withClaim("userId", user.id)
+            .withClaim("role", user.role)
             .withExpiresAt(Date(System.currentTimeMillis() + EXPRIRE_TIME * 60 * 1000))
             .sign(Algorithm.HMAC256(SECRET))
     }

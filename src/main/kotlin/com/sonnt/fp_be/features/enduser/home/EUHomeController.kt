@@ -1,6 +1,7 @@
 package com.sonnt.fp_be.features.enduser.home
 
 import com.sonnt.fp_be.features.enduser.home.request.GetNearbyMerchantRequest
+import com.sonnt.fp_be.features.enduser.home.response.GetHomeBannerResponse
 import com.sonnt.fp_be.features.enduser.home.response.GetHomeSectionResponse
 import com.sonnt.fp_be.features.enduser.home.response.NearByMerchantResponse
 import com.sonnt.fp_be.features.shared.controllers.BaseController
@@ -28,5 +29,11 @@ class EUHomeController: BaseController() {
         val merchants = euHomeService.getNearbyMerchant(cord)
 
         return ok(NearByMerchantResponse(merchants))
+    }
+
+    @GetMapping("banner")
+    fun getHomeBanner(): ResponseEntity<*> {
+        val banner = euHomeService.getHomeBanner()
+        return ok(GetHomeBannerResponse(banner))
     }
 }

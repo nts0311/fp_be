@@ -1,7 +1,7 @@
 package com.sonnt.fp_be.features.merchant.product
 
 import com.sonnt.fp_be.features.shared.controllers.BaseController
-import com.sonnt.fp_be.features.merchant.product.response.ProductDTO
+import com.sonnt.fp_be.features.shared.dto.ProductDTO
 import com.sonnt.fp_be.features.merchant.product.response.ProductListResponse
 import com.sonnt.fp_be.features.merchant.product.response.ProductResponse
 import com.sonnt.fp_be.utils.ok

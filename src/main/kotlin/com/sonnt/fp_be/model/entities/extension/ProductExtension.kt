@@ -1,8 +1,8 @@
 package com.sonnt.fp_be.model.entities.extension
 
-import com.sonnt.fp_be.features.merchant.product.response.ProductAttributeDTO
-import com.sonnt.fp_be.features.merchant.product.response.ProductAttributeOptionDTO
-import com.sonnt.fp_be.features.merchant.product.response.ProductDTO
+import com.sonnt.fp_be.features.shared.dto.ProductAttributeDTO
+import com.sonnt.fp_be.features.shared.dto.ProductAttributeOptionDTO
+import com.sonnt.fp_be.features.shared.dto.ProductDTO
 import com.sonnt.fp_be.features.shared.dto.ProductTagDTO
 import com.sonnt.fp_be.model.entities.product.Product
 import com.sonnt.fp_be.model.entities.product.ProductAttribute

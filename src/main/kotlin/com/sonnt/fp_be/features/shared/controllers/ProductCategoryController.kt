@@ -18,4 +18,6 @@ class ProductCategoryController: BaseController() {
         val categoryList = categoryService.getCategories()
         return ok(ProductCategoryResponse(categoryList))
     }
+
+
 }

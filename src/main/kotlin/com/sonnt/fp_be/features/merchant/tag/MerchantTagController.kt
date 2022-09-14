@@ -1,7 +1,5 @@
 package com.sonnt.fp_be.features.merchant.tag
 
-import com.sonnt.fp_be.features.merchant.product.response.ProductTagListResponse
-import com.sonnt.fp_be.features.merchant.product.response.ProductTagResponse
 import com.sonnt.fp_be.features.shared.controllers.BaseController
 import com.sonnt.fp_be.features.shared.dto.ProductTagDTO
 import com.sonnt.fp_be.utils.ok

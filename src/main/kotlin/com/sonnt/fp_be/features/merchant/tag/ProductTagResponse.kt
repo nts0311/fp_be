@@ -1,4 +1,4 @@
-package com.sonnt.fp_be.features.merchant.product.response
+package com.sonnt.fp_be.features.merchant.tag
 
 import com.sonnt.fp_be.features.shared.dto.ProductTagDTO
 import com.sonnt.fp_be.model.dto.response.BaseResponse
@@ -11,5 +11,5 @@ class ProductTagResponse(
 class ProductTagListResponse(
     val page: Int? = null,
     val size: Int? = null,
-    val tag: List<ProductTagDTO>
+    val menus: List<ProductTagDTO>
 ): BaseResponse()

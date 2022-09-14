@@ -3,11 +3,9 @@ package com.sonnt.fp_be.features.merchant.product
 import com.sonnt.fp_be.exceptions.BusinessException
 import com.sonnt.fp_be.exceptions.FPResponseStatus
 import com.sonnt.fp_be.features.merchant.BaseMerchantService
-import com.sonnt.fp_be.features.shared.services.BaseService
-import com.sonnt.fp_be.features.merchant.product.response.ProductDTO
+import com.sonnt.fp_be.features.shared.dto.ProductDTO
 import com.sonnt.fp_be.model.entities.extension.toDTO
 import com.sonnt.fp_be.model.entities.extension.toProductDTO
-import com.sonnt.fp_be.repos.MerchantRepo
 import com.sonnt.fp_be.repos.product.*
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.domain.PageRequest

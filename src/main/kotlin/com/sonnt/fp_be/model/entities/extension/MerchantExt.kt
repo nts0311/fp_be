@@ -2,6 +2,7 @@ package com.sonnt.fp_be.model.entities.extension
 
 import com.sonnt.fp_be.features.shared.dto.MerchantItemDTO
 import com.sonnt.fp_be.model.entities.Merchant
+import com.sonnt.fp_be.utils.GPSUtils
 import com.sonnt.fp_be.utils.sharedModelMapper
 
 fun Merchant.toItemDTO(): MerchantItemDTO = MerchantItemDTO(
