@@ -1,5 +1,6 @@
 package com.sonnt.fp_be.model.entities.extension
 
+import com.sonnt.fp_be.features.enduser.order.model.AttributeSelection
 import com.sonnt.fp_be.features.shared.dto.ProductAttributeDTO
 import com.sonnt.fp_be.features.shared.dto.ProductAttributeOptionDTO
 import com.sonnt.fp_be.features.shared.dto.ProductDTO
@@ -46,3 +47,18 @@ fun ProductTag.toDTO(): ProductTagDTO {
 }
 
 fun List<ProductTag>.toProductTagDTO() = this.map { it.toDTO() }
+
+fun Product.calculatePrice(selectedAttrs: List<AttributeSelection>): Double {
+    var result = price
+
+    for (selectedAttr in selectedAttrs) {
+        val att = attributes.first { it.id == selectedAttr.attributeId }
+        val optionsPrice = att.options
+            .filter { selectedAttr.optionsId.contains(it.id) }
+            .fold(0.0) {acc, option -> acc + option.price}
+
+        result += optionsPrice
+    }
+
+    return result
+}

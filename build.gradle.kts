@@ -33,6 +33,8 @@ dependencies {
     implementation ("org.springframework.boot:spring-boot-starter-websocket")
     implementation ("org.webjars:stomp-websocket:2.3.4")
     implementation("org.springframework.security:spring-security-messaging:5.7.2")
+
+    implementation ("com.google.maps:google-maps-services:2.1.0")
 }
 
 tasks.withType<KotlinCompile> {

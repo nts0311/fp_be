@@ -1,5 +1,6 @@
 package com.sonnt.fp_be.features.shared.dto
 
+import com.fasterxml.jackson.annotation.JsonProperty
 import com.sonnt.fp_be.model.entities.Merchant
 import com.sonnt.fp_be.model.entities.product.*
 import com.sonnt.fp_be.utils.sharedModelMapper
@@ -34,8 +35,8 @@ data class ProductDTO(
 
 data class ProductAttributeDTO(
     var id: Long? = null,
-    var isMultiple: Boolean? = null,
-    var isRequired: Boolean? = null,
+    var isMultiple: Boolean = false,
+    var isRequired: Boolean = false,
     var productId: Long? = null,
     var name: String? = null,
     var options: List<ProductAttributeOptionDTO> = listOf()
