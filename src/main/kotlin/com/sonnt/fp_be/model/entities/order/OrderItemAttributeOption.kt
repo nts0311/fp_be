@@ -17,12 +17,4 @@ class OrderItemAttributeOption(
         referencedColumnName = "id"
     )
     var option: ProductAttributeOption = ProductAttributeOption(),
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(
-        name = "order_item_attribute_id",
-        referencedColumnName = "id"
-    )
-    var attribute: OrderItemAttribute = OrderItemAttribute(),
-) {
-}
+)

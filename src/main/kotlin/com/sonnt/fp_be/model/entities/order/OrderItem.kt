@@ -11,19 +11,15 @@ class OrderItem(
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(
-        name = "order_id",
-        referencedColumnName = "id"
-    )
-    var orderItem: OrderRecord = OrderRecord(),
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(
         name = "product_id",
         referencedColumnName = "id"
     )
     var product: Product = Product(),
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "orderItem")
-    var attributes: MutableList<OrderItemAttribute> = mutableListOf()
+    @OneToMany(fetch = FetchType.LAZY, cascade = [CascadeType.ALL])
+    @JoinColumn(name = "order_item_id")
+    var attributes: MutableList<OrderItemAttribute> = mutableListOf(),
+
+    var num: Int = 1
 ) {
 }

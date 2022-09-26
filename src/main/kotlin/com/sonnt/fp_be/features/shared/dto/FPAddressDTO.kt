@@ -6,12 +6,12 @@ import com.sonnt.fp_be.utils.sharedModelMapper
 class FPAddressDTO(
     var id: Long = 0,
 
-    var ward: String?,
-    var district: String?,
-    var city: String?,
-    var detail: String?,
-    var lat: Double?,
-    var long: Double?
+    var ward: String? = null,
+    var district: String? = null,
+    var city: String? = null,
+    var detail: String? = null,
+    var lat: Double? = null,
+    var long: Double? = null
 ) {
     fun toDbModel() = sharedModelMapper.map(this, Address::class.java)
 }

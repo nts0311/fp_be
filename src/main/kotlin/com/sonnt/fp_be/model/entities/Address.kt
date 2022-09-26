@@ -12,10 +12,10 @@ class Address(
     @GeneratedValue(strategy = GenerationType.AUTO)
     var id: Long = 0,
 
-    var ward: String?,
-    var district: String?,
-    var city: String?,
-    var detail: String?,
+    var ward: String? = null,
+    var district: String? = null,
+    var city: String? = null,
+    var detail: String? = null,
     var lat: Double = 0.0,
     var long: Double = 0.0
 ) {

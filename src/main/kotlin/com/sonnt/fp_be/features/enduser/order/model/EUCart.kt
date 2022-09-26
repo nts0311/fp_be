@@ -6,8 +6,8 @@ data class AttributeSelection(
     val optionsId: List<Long>
 )
 
-data class CartProductItem(
+data class UserProductSelection(
     val productId: Long,
-    val attributes: List<AttributeSelection>,
+    val attributeSelections: List<AttributeSelection>,
     val num: Int
 )
