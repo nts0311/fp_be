@@ -35,6 +35,12 @@ dependencies {
     implementation("org.springframework.security:spring-security-messaging:5.7.2")
 
     implementation ("com.google.maps:google-maps-services:2.1.0")
+
+    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
+    implementation("com.fasterxml.jackson.core:jackson-core:2.13.0")
+    implementation ("com.fasterxml.jackson.core:jackson-databind:2.13.0")
+    implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.13.3")
+
 }
 
 tasks.withType<KotlinCompile> {

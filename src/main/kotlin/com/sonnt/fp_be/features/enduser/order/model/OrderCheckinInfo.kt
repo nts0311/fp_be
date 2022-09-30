@@ -1,11 +1,13 @@
 package com.sonnt.fp_be.features.enduser.order.model
 
+import com.sonnt.fp_be.model.entities.order.OrderEstimatedRouteInfo
 
-data class OrderEstimatedRouteInfo(
-    val durationInSec: Long,
-    val distanceInMeter: Long,
-    val distanceReadable: String
-)
+
+//data class OrderEstimatedRouteInfo(
+//    val durationInSec: Long,
+//    val distanceInMeter: Long,
+//    val distanceReadable: String
+//)
 
 data class OrderPaymentInfo(
     val price: Double,

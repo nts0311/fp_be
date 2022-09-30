@@ -5,6 +5,11 @@ import com.sonnt.fp_be.features.enduser.order.request.GetOrderCheckinInfoRequest
 import com.sonnt.fp_be.features.enduser.order.response.CreateNewOrderResponse
 import com.sonnt.fp_be.features.enduser.order.response.GetOrderCheckinInfoResponse
 import com.sonnt.fp_be.features.shared.controllers.BaseController
+import com.sonnt.fp_be.features.shared.services.FindDriverService
+import com.sonnt.fp_be.model.entities.extension.toDTO
+import com.sonnt.fp_be.model.entities.order.OrderRecord
+import com.sonnt.fp_be.repos.DriverRepo
+import com.sonnt.fp_be.repos.OrderRecordRepo
 import com.sonnt.fp_be.utils.ok
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
@@ -14,12 +19,13 @@ import org.springframework.web.bind.annotation.*
 @RequestMapping("/enduser/order")
 class EUOrderController: BaseController() {
 
-    @Autowired lateinit var orderService: EUOrderService
+    @Autowired
+    lateinit var orderService: EUOrderService
 
     @PostMapping("checkin-info")
     fun getOrderCheckinInfo(@RequestBody body: GetOrderCheckinInfoRequest): ResponseEntity<*> {
         val result = orderService.getOrderCheckinInfo(body)
-        return ok(GetOrderCheckinInfoResponse(result))
+        return ok(result)
     }
 
     @PostMapping("create")
@@ -31,5 +37,20 @@ class EUOrderController: BaseController() {
     @GetMapping("get-info")
     fun getOrderInfo(@RequestParam orderId: Long): ResponseEntity<*> {
         return ok(orderService.getOrderInfo(orderId))
+    }
+
+    @Autowired lateinit var orderRecordRepo: OrderRecordRepo
+    @Autowired lateinit var findDriverService: FindDriverService
+    @Autowired lateinit var driverRepo: DriverRepo
+
+    @GetMapping("test")
+    fun getOrder(): ResponseEntity<*> {
+        val order = orderRecordRepo.findById(503).get()
+        val orderInfo = orderService.getOrderInfo(order)
+        val driver = driverRepo.findAll().first()
+
+        findDriverService.sendNewOrderRequestToDriver(driver, orderInfo)
+
+        return ok()
     }
 }

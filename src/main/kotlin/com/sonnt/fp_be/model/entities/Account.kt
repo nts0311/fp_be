@@ -15,5 +15,6 @@ class Account(
     var role: String = "",
     var isActive: Boolean = true,
     var isLocked: Boolean = false,
+    var phone: String = ""
 ) {
 }

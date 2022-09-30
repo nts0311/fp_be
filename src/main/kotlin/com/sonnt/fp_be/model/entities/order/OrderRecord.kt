@@ -21,7 +21,7 @@ class OrderRecord(
     @GeneratedValue(strategy = GenerationType.AUTO)
     var id: Long = 0,
 
-    var code: String = "",
+    var code: String? = null,
 
     var createDate: LocalDateTime = LocalDateTime.now(),
 
@@ -46,6 +46,10 @@ class OrderRecord(
     @OneToOne(fetch = FetchType.LAZY, orphanRemoval = true)
     @JoinColumn(name = "receiving_address_id")
     var receivingAddress: Address? = null,
+
+    @OneToOne(fetch = FetchType.LAZY, orphanRemoval = true, cascade = [CascadeType.ALL])
+    @JoinColumn(name = "estimated_route_info_id")
+    var estimatedRouteInfo: OrderEstimatedRouteInfo? = null,
 
     @Enumerated(EnumType.STRING)
     var status: OrderStatus = OrderStatus.INIT

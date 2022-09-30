@@ -11,14 +11,16 @@ import com.sonnt.fp_be.features.enduser.EndUserBaseService
 import com.sonnt.fp_be.features.enduser.order.model.*
 import com.sonnt.fp_be.features.enduser.order.request.CreateOrderRequest
 import com.sonnt.fp_be.features.enduser.order.request.GetOrderCheckinInfoRequest
-import com.sonnt.fp_be.features.enduser.order.response.GetOrderInfoResponse
-import com.sonnt.fp_be.features.enduser.order.response.OrderedProductItem
+import com.sonnt.fp_be.features.enduser.order.response.GetOrderCheckinInfoResponse
+import com.sonnt.fp_be.features.enduser.order.response.OrderInfo
 import com.sonnt.fp_be.features.shared.dto.FPAddressDTO
 import com.sonnt.fp_be.features.shared.services.mapApiContext
 import com.sonnt.fp_be.model.entities.Address
 import com.sonnt.fp_be.model.entities.extension.calculatePrice
+import com.sonnt.fp_be.model.entities.extension.toOrderedProductItem
 import com.sonnt.fp_be.model.entities.extension.toUserProductSelection
 import com.sonnt.fp_be.model.entities.order.*
+import com.sonnt.fp_be.repos.AddressRepo
 import com.sonnt.fp_be.repos.OrderRecordRepo
 import com.sonnt.fp_be.repos.product.ProductRepo
 import org.springframework.beans.factory.annotation.Autowired
@@ -30,11 +32,12 @@ class EUOrderService: EndUserBaseService() {
 
     @Autowired lateinit var productRepo: ProductRepo
     @Autowired lateinit var orderRepo: OrderRecordRepo
+    @Autowired lateinit var addressRepo: AddressRepo
 
     val serviceFee = 2000.0
     val deliveryFeePerKm = 10000
 
-    fun getOrderCheckinInfo(request: GetOrderCheckinInfoRequest): OrderCheckinInfo {
+    fun getOrderCheckinInfo(request: GetOrderCheckinInfoRequest): GetOrderCheckinInfoResponse {
         val cartProducts = request.userProductSelection
         if(cartProducts.isEmpty()) throw BusinessException(FPResponseStatus.cartEmpty)
 
@@ -43,9 +46,9 @@ class EUOrderService: EndUserBaseService() {
         val euAddress = request.euAddress.toDbModel()
 
         val orderEstimatedRouteInfo = getOrderEstimateRoute(merchantAddress, euAddress)
-        val orderPaymentInfo = getOrderPaymentInfo(orderEstimatedRouteInfo.distanceInMeter, request.userProductSelection)
+        val orderPaymentInfo = getOrderPaymentInfo(orderEstimatedRouteInfo.getDistanceInMeter(), request.userProductSelection)
 
-        return OrderCheckinInfo(orderEstimatedRouteInfo, orderPaymentInfo)
+        return GetOrderCheckinInfoResponse(orderEstimatedRouteInfo, orderPaymentInfo)
     }
 
     fun createOrder(request: CreateOrderRequest): Long {
@@ -54,13 +57,18 @@ class EUOrderService: EndUserBaseService() {
         val merchant = productRepo.findById(userProductSelection.first().productId).get().merchant
         val orderItems = userProductSelection.map { userProductSelectionToOrderItem(it) }.toMutableList()
 
+        val merchantAddress = merchant.address ?: throw BusinessException(FPResponseStatus.notFoung)
+        val euAddress = addressRepo.findById(request.addressId).get()
+        val orderEstimatedRouteInfo = getOrderEstimateRoute(merchantAddress, euAddress)
+
         val newOrder = OrderRecord(
             note = request.note,
             items = orderItems,
             customer = customer,
             merchant = merchant,
-            receivingAddress = Address(id = request.addressId),
-            status = OrderStatus.SEARCHING_DRIVER
+            receivingAddress = euAddress,
+            status = OrderStatus.SEARCHING_DRIVER,
+            estimatedRouteInfo = orderEstimatedRouteInfo
         )
 
         orderRepo.save(newOrder)
@@ -69,33 +77,40 @@ class EUOrderService: EndUserBaseService() {
         return newOrder.id
     }
 
-    fun getOrderInfo(orderId: Long): GetOrderInfoResponse {
+    fun getOrderInfo(orderId: Long): OrderInfo {
         val order = orderRepo.findById(orderId).get()
+        return getOrderInfo(order)
+    }
 
+    fun getOrderInfo(order: OrderRecord): OrderInfo {
         val orderedItem = order.items.map {
-            OrderedProductItem(name = it.product.name, num = it.num)
+            it.toOrderedProductItem()
         }
 
         val fromAddress = order.merchant?.address!!
         val toAddress = order.receivingAddress!!
 
-        val orderEstimatedRouteInfo = getOrderEstimateRoute(fromAddress, toAddress)
-        val orderPaymentInfo = getOrderPaymentInfo(orderEstimatedRouteInfo.distanceInMeter, order.toUserProductSelection())
+        val orderEstimatedRouteInfo = order.estimatedRouteInfo!!
 
-        return GetOrderInfoResponse(orderId,
+        val orderPaymentInfo = getOrderPaymentInfo(orderEstimatedRouteInfo.getDistanceInMeter(), order.toUserProductSelection())
+
+        return OrderInfo(order.id,
             order.status.value,
             order.createDate,
             modelMapper.map(fromAddress, FPAddressDTO::class.java),
             modelMapper.map(toAddress, FPAddressDTO::class.java),
             orderEstimatedRouteInfo,
             orderedItem,
-            orderPaymentInfo
+            orderPaymentInfo,
+            order.customer?.account?.name ?: "",
+            order.customer?.account?.phone ?: "",
+            order.merchant?.account?.name ?: "",
+            order.merchant?.account?.phone ?: ""
         )
     }
 
 
-
-    private fun userProductSelectionToOrderItem(userProductSelection: UserProductSelection): OrderItem {
+    private fun  userProductSelectionToOrderItem(userProductSelection: UserProductSelection): OrderItem {
         val orderItem = OrderItem()
         val product = productRepo.findById(userProductSelection.productId).get()
 
@@ -144,7 +159,7 @@ class EUOrderService: EndUserBaseService() {
         val euAddress = LatLng(addr2.lat, addr2.long)
 
         val result = distanceMatrix(merchantAddress, euAddress).rows.first().elements.first()
-        return OrderEstimatedRouteInfo(result.duration.inSeconds, result.distance.inMeters, result.distance.humanReadable)
+        return OrderEstimatedRouteInfo(0, result.duration.inSeconds, result.distance.inMeters, result.distance.humanReadable)
     }
 
     private fun distanceMatrix(addr1: LatLng, addr2: LatLng): DistanceMatrix {

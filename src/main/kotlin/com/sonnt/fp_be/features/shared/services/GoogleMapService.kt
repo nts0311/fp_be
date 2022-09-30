@@ -5,5 +5,5 @@ import org.springframework.stereotype.Component
 import org.springframework.stereotype.Service
 
 val mapApiContext = GeoApiContext.Builder()
-    .apiKey("AIzaSyAhSk7HwMGow6RudDoEyrYiaJOwFColc34")
+    .apiKey("AIzaSyDiMTlswUq0ViADeQUUwIn8EPaZd4rBUo8")
     .build()
