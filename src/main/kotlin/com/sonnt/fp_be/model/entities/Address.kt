@@ -17,6 +17,6 @@ class Address(
     var city: String? = null,
     var detail: String? = null,
     var lat: Double = 0.0,
-    var long: Double = 0.0
+    var lng: Double = 0.0
 ) {
 }

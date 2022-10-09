@@ -15,10 +15,7 @@ class WebSocketConfig: WebSocketMessageBrokerConfigurer {
     override fun configureMessageBroker(registry: MessageBrokerRegistry) {
         registry.setApplicationDestinationPrefixes("/app")
         registry.setUserDestinationPrefix("/users")
-        registry.enableSimpleBroker("driver")
-        registry.enableSimpleBroker("eu")
-        registry.enableSimpleBroker("merchant")
-
+        registry.enableSimpleBroker("ws")
     }
 
     override fun registerStompEndpoints(registry: StompEndpointRegistry) {

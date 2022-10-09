@@ -11,7 +11,7 @@ class FPAddressDTO(
     var city: String? = null,
     var detail: String? = null,
     var lat: Double? = null,
-    var long: Double? = null
+    var lng: Double? = null
 ) {
     fun toDbModel() = sharedModelMapper.map(this, Address::class.java)
 }

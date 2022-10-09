@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.sonnt.fp_be.features.shared.model.WSMessage
+import com.sonnt.fp_be.features.shared.model.WSMessageCode
 import com.sonnt.fp_be.features.shared.model.WSMessageWrapper
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.messaging.simp.SimpMessagingTemplate
@@ -22,6 +23,10 @@ class WSMessageService {
         val body = objectMapper.writeValueAsString(messageWrapper.body)
         val message = WSMessage(messageWrapper.code, body)
         messageTemplate.convertAndSendToUser(messageWrapper.username, messageWrapper.endpoint, message)
+    }
+
+    fun sendTestMessage(username: String) {
+        messageTemplate.convertAndSendToUser("driver", "/driver/test", WSMessage(WSMessageCode.NEW_ORDER, "test"))
     }
 
 }

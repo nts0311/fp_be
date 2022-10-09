@@ -51,7 +51,7 @@ class EUHomeService: EndUserBaseService() {
             .toMerchantItemList()
             .onEach {dto ->
                 dto.address?.also { address ->
-                    dto.distance = GPSUtils.distance(cord, Cord(address.lat, address.long))
+                    dto.distance = GPSUtils.distance(cord, Cord(address.lat, address.lng))
                 }
             }
     }

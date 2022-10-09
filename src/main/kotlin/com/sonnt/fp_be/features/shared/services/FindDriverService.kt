@@ -1,6 +1,5 @@
 package com.sonnt.fp_be.features.shared.services
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import com.sonnt.fp_be.features.enduser.order.EUOrderService
 import com.sonnt.fp_be.features.enduser.order.response.OrderInfo
 import com.sonnt.fp_be.features.shared.model.WSMessageCode
@@ -12,11 +11,10 @@ import com.sonnt.fp_be.repos.DriverRepo
 import com.sonnt.fp_be.repos.OrderRecordRepo
 import kotlinx.coroutines.*
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.messaging.simp.SimpMessagingTemplate
 import org.springframework.stereotype.Service
 import java.util.concurrent.ConcurrentHashMap
 
-const val WS_DRIVER_ORDER_DELIVERY_REQUEST = "/driver/newOrderRequest"
+const val WS_DRIVER_ORDER_DELIVERY_REQUEST = "/ws/driver/newOrderRequest"
 const val WS_DRIVER_ORDER_STATUS = "/users/driver/orderStatus"
 
 const val WS_EU_ORDER_STATUS = "/users/eu/orderStatus"
@@ -77,7 +75,7 @@ class FindDriverService {
 
     private suspend fun getListDriverNearestToMerchant(address: Address): List<Driver> {
         return withContext(Dispatchers.IO) {
-            driverRepo.findNearestDriverToMerchant(address.lat, address.long)
+            driverRepo.findNearestDriverToMerchant(address.lat, address.lng)
         }
     }
 

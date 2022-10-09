@@ -17,4 +17,10 @@ interface DriverRepo: JpaRepository<Driver, Long> {
         , nativeQuery = true
     )
     fun findNearestDriverToMerchant(merchantLat: Double, merchantLong: Double): List<Driver>
+
+    @Query(
+        value = "SELECT id FROM driver WHERE account_id=:userId LIMIT 1",
+        nativeQuery = true
+    )
+    fun findDriverIdByUserId(userId: Long): Long
 }

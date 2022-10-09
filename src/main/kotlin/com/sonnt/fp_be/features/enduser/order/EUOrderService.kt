@@ -155,8 +155,8 @@ class EUOrderService: EndUserBaseService() {
     }
 
     private fun getOrderEstimateRoute(addr1: Address, addr2: Address): OrderEstimatedRouteInfo{
-        val merchantAddress = LatLng(addr1.lat, addr1.long)
-        val euAddress = LatLng(addr2.lat, addr2.long)
+        val merchantAddress = LatLng(addr1.lat, addr1.lng)
+        val euAddress = LatLng(addr2.lat, addr2.lng)
 
         val result = distanceMatrix(merchantAddress, euAddress).rows.first().elements.first()
         return OrderEstimatedRouteInfo(0, result.duration.inSeconds, result.distance.inMeters, result.distance.humanReadable)
