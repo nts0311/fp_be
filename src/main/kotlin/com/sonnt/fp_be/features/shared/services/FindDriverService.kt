@@ -6,6 +6,7 @@ import com.sonnt.fp_be.features.shared.model.WSMessageCode
 import com.sonnt.fp_be.features.shared.model.WSMessageWrapper
 import com.sonnt.fp_be.model.entities.Address
 import com.sonnt.fp_be.model.entities.Driver
+import com.sonnt.fp_be.model.entities.DriverStatus
 import com.sonnt.fp_be.model.entities.order.OrderRecord
 import com.sonnt.fp_be.repos.DriverRepo
 import com.sonnt.fp_be.repos.OrderRecordRepo
@@ -14,13 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import java.util.concurrent.ConcurrentHashMap
 
-const val WS_DRIVER_ORDER_DELIVERY_REQUEST = "/ws/driver/newOrderRequest"
-const val WS_DRIVER_ORDER_STATUS = "/users/driver/orderStatus"
-
-const val WS_EU_ORDER_STATUS = "/users/eu/orderStatus"
-
-const val WS_MERCHANT_ORDERS = "/users/merchant/orders"
-
 //🥺
 @Service
 class FindDriverService {
@@ -28,27 +22,37 @@ class FindDriverService {
     @Autowired private lateinit var orderRecordRepo: OrderRecordRepo
     @Autowired private lateinit var driverRepo: DriverRepo
     @Autowired private lateinit var orderService: EUOrderService
-    @Autowired private lateinit var wsMessageService: WSMessageService
+    @Autowired private lateinit var orderTrackingService: OrderTrackingService
 
     val coroutineScope = CoroutineScope(Dispatchers.Default)
     val driverFindingJobList = ConcurrentHashMap<Long, Job>()
+    val suitableDriverList = ConcurrentHashMap<Long, List<Driver>>()
 
     fun findOrderForOrder(id: Long) {
 
         val job = coroutineScope.launch {
             val order = getOrder(id)
             val orderInfo = orderService.getOrderInfo(order)
-            sendFindingDriver(order)
 
             val merchantAddress  = order.merchant?.address ?: return@launch
             val listSuitableDriver = getListDriverNearestToMerchant(merchantAddress)
+            suitableDriverList[id] = listSuitableDriver
+
+            withContext(Dispatchers.IO) {
+                updateDriverStatus(listSuitableDriver, DriverStatus.QUEUE_FOR_NEW_ORDER)
+            }
 
             for(driver in listSuitableDriver) {
-                sendNewOrderRequestToDriver(driver, orderInfo)
+                orderTrackingService.sendNewOrderRequestToDriver(driver, orderInfo)
                 delay(60 * 1000)
             }
 
-            sendNotSuccessFindingDriver(order)
+            orderTrackingService.sendNotSuccessFindingDriver(order)
+        }
+
+        job.invokeOnCompletion {
+            val listDriverQueueing = suitableDriverList[id] ?: return@invokeOnCompletion
+            updateDriverStatus(listDriverQueueing, DriverStatus.IDLE)
         }
 
         driverFindingJobList[id] = job
@@ -60,11 +64,16 @@ class FindDriverService {
 
         val order = orderRecordRepo.findById(orderId).get()
         val driver = driverRepo.findById(driverId).get()
+        driver.status = DriverStatus.DELIVERING
 
         order.driver = driver
-        orderRecordRepo.save(order)
 
-        sendSuccessFindingDriver(order)
+        orderRecordRepo.save(order)
+        orderRecordRepo.flush()
+        driverRepo.save(driver)
+        driverRepo.flush()
+
+        orderTrackingService.sendSuccessFindingDriver(order)
     }
 
     private suspend fun getOrder(orderId: Long): OrderRecord {
@@ -79,20 +88,13 @@ class FindDriverService {
         }
     }
 
-    fun sendNewOrderRequestToDriver(driver: Driver, orderInfo: OrderInfo) {
-        val message = WSMessageWrapper(WS_DRIVER_ORDER_DELIVERY_REQUEST,driver.account.username, WSMessageCode.NEW_ORDER, orderInfo)
-        wsMessageService.sendMessage(message)
+    private fun updateDriverStatus(drivers: List<Driver>, status: DriverStatus) {
+            drivers.forEach {
+                it.status = status
+            }
+
+            driverRepo.saveAll(drivers)
+            driverRepo.flush()
     }
 
-    private fun sendNotSuccessFindingDriver(order: OrderRecord) {
-
-    }
-
-    private fun sendSuccessFindingDriver(order: OrderRecord) {
-
-    }
-
-    private fun sendFindingDriver(order: OrderRecord) {
-
-    }
 }

@@ -52,5 +52,8 @@ class OrderRecord(
     var estimatedRouteInfo: OrderEstimatedRouteInfo? = null,
 
     @Enumerated(EnumType.STRING)
-    var status: OrderStatus = OrderStatus.INIT
+    var status: OrderStatus = OrderStatus.INIT,
+
+    var billImageUrl: String? = null,
+    var deliveredEvidenceImageUrl: String? = null
 )

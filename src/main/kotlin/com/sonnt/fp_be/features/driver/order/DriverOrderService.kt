@@ -1,5 +1,6 @@
 package com.sonnt.fp_be.features.driver.order
 
+import com.sonnt.fp_be.features.driver.order.dto.*
 import com.sonnt.fp_be.features.shared.services.BaseService
 import com.sonnt.fp_be.features.shared.services.FindDriverService
 import com.sonnt.fp_be.repos.DriverRepo
@@ -15,6 +16,22 @@ class DriverOrderService: BaseService() {
     fun acceptOrder(orderId: Long) {
         val driverId = driverRepo.findDriverIdByUserId(userId)
         findDriverService.acceptOrderDeliveryRequest(orderId, driverId)
+    }
+
+    fun arrivedAtMerchant(body: ArrivedAtMerchantRequest) {
+
+    }
+
+    fun confirmReceived(body: ConfirmReceivedOrderRequest) {
+
+    }
+
+    fun arrivedAtCustomer(body: ArrivedAtCustomerRequest) {
+
+    }
+
+    fun confirmCompletedOrder(body: ConfirmCompletedOrderRequest) {
+
     }
 
 

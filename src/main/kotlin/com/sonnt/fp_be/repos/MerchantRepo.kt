@@ -10,7 +10,7 @@ interface MerchantRepo : JpaRepository<Merchant, Long> {
     @Query(
         value = "SELECT * FROM merchant " +
                 "         INNER JOIN address a ON merchant.address_id = a.id " +
-                "ORDER BY (6371 * acos(cos(radians(:lat)) * cos(radians(a.lat)) * cos(radians(a.long) - radians(:long)) +" +
+                "ORDER BY (6371 * acos(cos(radians(:lat)) * cos(radians(a.lat)) * cos(radians(a.lng) - radians(:long)) +" +
                 "                      sin(radians(:lat)) * sin(radians(a.lat)))) " +
                 "LIMIT :pageSize OFFSET :page"
         , nativeQuery = true

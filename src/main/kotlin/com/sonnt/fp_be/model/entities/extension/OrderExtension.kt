@@ -9,6 +9,7 @@ import com.sonnt.fp_be.features.shared.dto.OrderItemDTO
 import com.sonnt.fp_be.model.entities.order.OrderItem
 import com.sonnt.fp_be.model.entities.order.OrderItemAttribute
 import com.sonnt.fp_be.model.entities.order.OrderRecord
+import com.sonnt.fp_be.repos.OrderRecordRepo
 import com.sonnt.fp_be.utils.sharedModelMapper
 
 fun OrderRecord.toUserProductSelection(): List<UserProductSelection> {
@@ -63,3 +64,7 @@ fun OrderItem.toOrderedProductItem(): OrderedProductItem {
 
     return OrderedProductItem(this.product.name, this.num, listAttrs)
 }
+
+fun OrderRecord.getCustomerUsername() = customer?.account?.username
+fun OrderRecord.getDriverUsername() = driver?.account?.username
+fun OrderRecord.getMerchantUsername() = merchant?.account?.username

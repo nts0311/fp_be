@@ -105,7 +105,10 @@ class EUOrderService: EndUserBaseService() {
             order.customer?.account?.name ?: "",
             order.customer?.account?.phone ?: "",
             order.merchant?.account?.name ?: "",
-            order.merchant?.account?.phone ?: ""
+            order.merchant?.account?.phone ?: "",
+            order.driver?.account?.name,
+            order.driver?.account?.phone,
+            order.driver?.plate
         )
     }
 

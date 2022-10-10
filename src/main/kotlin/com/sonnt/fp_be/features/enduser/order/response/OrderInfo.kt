@@ -23,5 +23,8 @@ data class OrderInfo(
     val customerName: String,
     val customerPhone: String,
     val merchantName: String,
-    val merchantPhone: String
+    val merchantPhone: String,
+    val driverName: String?,
+    val driverPhone: String?,
+    val driverPlate: String?
 )

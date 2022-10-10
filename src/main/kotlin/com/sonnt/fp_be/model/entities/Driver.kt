@@ -1,7 +1,14 @@
 package com.sonnt.fp_be.model.entities
 
+import com.sonnt.fp_be.model.entities.order.OrderStatus
 import com.sonnt.fp_be.model.entities.stats.DriverStat
 import javax.persistence.*
+
+enum class DriverStatus(val value: String) {
+    IDLE("IDLE"),
+    QUEUE_FOR_NEW_ORDER("QUEUE_FOR_NEW_ORDER"),
+    DELIVERING("DELIVERING"),
+}
 
 @Entity
 class Driver(
@@ -19,6 +26,11 @@ class Driver(
     @OneToOne(fetch = FetchType.LAZY, cascade = [CascadeType.ALL])
     @JoinColumn(name = "last_location_id")
     var lastLocation: Address? = null,
+
+    @Enumerated(EnumType.STRING)
+    var status: DriverStatus = DriverStatus.IDLE,
+
+    var plate: String? = null
 
 ) {
 }

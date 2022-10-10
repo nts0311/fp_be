@@ -49,7 +49,7 @@ class EUOrderController: BaseController() {
         val orderInfo = orderService.getOrderInfo(order)
         val driver = driverRepo.findAll().first()
 
-        findDriverService.sendNewOrderRequestToDriver(driver, orderInfo)
+        //findDriverService.sendNewOrderRequestToDriver(driver, orderInfo)
 
         return ok()
     }

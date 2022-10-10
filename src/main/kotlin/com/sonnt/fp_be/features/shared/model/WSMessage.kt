@@ -1,10 +1,13 @@
 package com.sonnt.fp_be.features.shared.model
 
 enum class WSMessageCode(val code: Int) {
-    FINDING_DRIVER(0),
+    ORDER_COMPLETED(0),
     NEW_ORDER(1),
     FOUND_DRIVER(2),
-    CANCEL_ORDER(3)
+    CANCEL_ORDER(3),
+    DRIVER_ARRIVED_TO_MERCHANT(4),
+    DELIVERING_ORDER_TO_CUSTOMER(5),
+    DRIVER_ARRIVED_TO_CUSTOMER(6)
 }
 
 data class WSMessage(val code: Int, val body: String) {
