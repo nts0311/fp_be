@@ -41,7 +41,7 @@ class DriverOrderController: BaseController() {
         return ok()
     }
 
-    @PostMapping("confirm-received-order")
+    @PostMapping("confirm-completed-order")
     fun confirmCompletedOrder(@RequestBody body: ConfirmCompletedOrderRequest): ResponseEntity<*> {
         orderService.confirmCompletedOrder(body)
         return ok()

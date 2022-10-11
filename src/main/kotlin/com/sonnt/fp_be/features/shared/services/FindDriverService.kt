@@ -62,18 +62,10 @@ class FindDriverService {
         driverFindingJobList[orderId]?.cancel()
         driverFindingJobList.remove(orderId)
 
-        val order = orderRecordRepo.findById(orderId).get()
-        val driver = driverRepo.findById(driverId).get()
-        driver.status = DriverStatus.DELIVERING
+        val listDriverQueueing = suitableDriverList[orderId] ?: return
+        updateDriverStatus(listDriverQueueing, DriverStatus.IDLE)
 
-        order.driver = driver
-
-        orderRecordRepo.save(order)
-        orderRecordRepo.flush()
-        driverRepo.save(driver)
-        driverRepo.flush()
-
-        orderTrackingService.sendSuccessFindingDriver(order)
+        suitableDriverList.remove(orderId)
     }
 
     private suspend fun getOrder(orderId: Long): OrderRecord {
