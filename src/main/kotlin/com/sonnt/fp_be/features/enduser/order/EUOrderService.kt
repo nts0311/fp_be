@@ -14,6 +14,8 @@ import com.sonnt.fp_be.features.enduser.order.request.GetOrderCheckinInfoRequest
 import com.sonnt.fp_be.features.enduser.order.response.GetOrderCheckinInfoResponse
 import com.sonnt.fp_be.features.enduser.order.response.OrderInfo
 import com.sonnt.fp_be.features.shared.dto.FPAddressDTO
+import com.sonnt.fp_be.features.shared.model.toDTO
+import com.sonnt.fp_be.features.shared.services.FindDriverService
 import com.sonnt.fp_be.features.shared.services.mapApiContext
 import com.sonnt.fp_be.model.entities.Address
 import com.sonnt.fp_be.model.entities.extension.calculatePrice
@@ -33,6 +35,7 @@ class EUOrderService: EndUserBaseService() {
     @Autowired lateinit var productRepo: ProductRepo
     @Autowired lateinit var orderRepo: OrderRecordRepo
     @Autowired lateinit var addressRepo: AddressRepo
+    @Autowired lateinit var findDriverService: FindDriverService
 
     val serviceFee = 2000.0
     val deliveryFeePerKm = 10000
@@ -74,6 +77,9 @@ class EUOrderService: EndUserBaseService() {
         orderRepo.save(newOrder)
         orderRepo.flush()
 
+        val orderInfo = getOrderInfo(newOrder)
+        findDriverService.findOrderForOrder(orderInfo)
+
         return newOrder.id
     }
 
@@ -94,6 +100,8 @@ class EUOrderService: EndUserBaseService() {
 
         val orderPaymentInfo = getOrderPaymentInfo(orderEstimatedRouteInfo.getDistanceInMeter(), order.toUserProductSelection())
 
+        val driverInfo = order.driver?.toDTO()
+
         return OrderInfo(order.id,
             order.status.value,
             order.createDate,
@@ -106,14 +114,17 @@ class EUOrderService: EndUserBaseService() {
             order.customer?.account?.phone ?: "",
             order.merchant?.account?.name ?: "",
             order.merchant?.account?.phone ?: "",
-            order.driver?.account?.name,
-            order.driver?.account?.phone,
-            order.driver?.plate
+            driverInfo
         )
     }
 
+    fun getUserActiveOrder(): OrderInfo? {
+        val customerId = customerRepo.findCustomerByAccountId(userId)?.id ?: return null
+        val order = orderRepo.findActiveOrderOf(customerId) ?: return null
+        return getOrderInfo(order)
+    }
 
-    private fun  userProductSelectionToOrderItem(userProductSelection: UserProductSelection): OrderItem {
+    private fun userProductSelectionToOrderItem(userProductSelection: UserProductSelection): OrderItem {
         val orderItem = OrderItem()
         val product = productRepo.findById(userProductSelection.productId).get()
 

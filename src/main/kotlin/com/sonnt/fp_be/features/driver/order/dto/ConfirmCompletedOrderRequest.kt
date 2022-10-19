@@ -1,6 +1,6 @@
 package com.sonnt.fp_be.features.driver.order.dto
 
-class ConfirmCompletedOrderRequest(
-    val orderId: Long,
-    val evidenceImageUrl: String
+data class ConfirmCompletedOrderRequest(
+    var orderId: Long = 0,
+    var evidenceImageUrl: String = ""
 )

@@ -1,5 +1,5 @@
 package com.sonnt.fp_be.features.driver.order.dto
 
-class ArrivedAtMerchantRequest(
-    val orderId: Long
+data class ArrivedAtMerchantRequest(
+    var orderId: Long = 0
 )

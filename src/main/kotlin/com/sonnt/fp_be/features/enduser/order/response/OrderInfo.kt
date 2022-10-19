@@ -2,6 +2,7 @@ package com.sonnt.fp_be.features.enduser.order.response
 
 import com.sonnt.fp_be.features.enduser.order.model.OrderPaymentInfo
 import com.sonnt.fp_be.features.shared.dto.FPAddressDTO
+import com.sonnt.fp_be.features.shared.model.DriverDTO
 import com.sonnt.fp_be.model.entities.order.OrderEstimatedRouteInfo
 import java.time.LocalDateTime
 
@@ -24,7 +25,5 @@ data class OrderInfo(
     val customerPhone: String,
     val merchantName: String,
     val merchantPhone: String,
-    val driverName: String?,
-    val driverPhone: String?,
-    val driverPlate: String?
+    val driverInfo: DriverDTO?
 )

@@ -2,6 +2,7 @@ package com.sonnt.fp_be.features.driver.order
 
 import com.sonnt.fp_be.features.driver.order.dto.*
 import com.sonnt.fp_be.features.shared.controllers.BaseController
+import com.sonnt.fp_be.utils.badRequest
 import com.sonnt.fp_be.utils.ok
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
@@ -19,7 +20,8 @@ class DriverOrderController: BaseController() {
 
     @PostMapping("accept-order")
     fun acceptOrder(@RequestBody body: AcceptOrderResultRequest): ResponseEntity<*> {
-        orderService.acceptOrder(body.orderId)
+        val orderId = body.orderId ?: return badRequest("Invaild parrams")
+        orderService.acceptOrder(orderId)
         return ok()
     }
 

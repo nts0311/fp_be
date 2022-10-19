@@ -82,11 +82,17 @@ class DriverOrderService: BaseService() {
         val orderId = body.orderId
         val order = orderRepo.findById(orderId).get()
 
-        order.billImageUrl = body.evidenceImageUrl
+        order.deliveredEvidenceImageUrl = body.evidenceImageUrl
         order.status = OrderStatus.SUCCEED
 
         orderRepo.save(order)
         orderRepo.flush()
+
+        val driverId = driverRepo.findDriverIdByUserId(userId)
+        val driver = driverRepo.findById(driverId).get()
+        driver.status = DriverStatus.IDLE
+        driverRepo.save(driver)
+        driverRepo.flush()
 
         orderTrackingService.sendOrderCompleted(order)
     }

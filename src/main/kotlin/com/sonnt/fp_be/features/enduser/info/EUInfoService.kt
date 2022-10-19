@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service
 
 @Service
 class EUInfoService: EndUserBaseService() {
-    val DELTA_DISTANCE = 5
+    val DELTA_DISTANCE = 20
 
     fun getUserLocation(currentLocation: FPAddressDTO): FPAddressDTO {
         val userLocations = customerRepo.findCustomerByAccountId(userId)?.address ?: return currentLocation

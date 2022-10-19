@@ -24,6 +24,7 @@ class OrderTrackingService: BaseService() {
     private lateinit var wsMessageService: WSMessageService
 
     fun sendNewOrderRequestToDriver(driver: Driver, orderInfo: OrderInfo) {
+        println("Send new order request to: ${driver.id}")
         val message = WSMessageWrapper(WS_DRIVER_ORDER_DELIVERY_REQUEST,driver.account.username, WSMessageCode.NEW_ORDER, orderInfo)
         wsMessageService.sendMessage(message)
     }
