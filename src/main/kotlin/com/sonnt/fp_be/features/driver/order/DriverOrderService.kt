@@ -1,10 +1,8 @@
 package com.sonnt.fp_be.features.driver.order
 
 import com.sonnt.fp_be.features.driver.order.dto.*
-import com.sonnt.fp_be.features.enduser.order.EUOrderService
-import com.sonnt.fp_be.features.shared.services.BaseService
-import com.sonnt.fp_be.features.shared.services.FindDriverService
-import com.sonnt.fp_be.features.shared.services.OrderTrackingService
+import com.sonnt.fp_be.features.enduser.order.response.OrderInfo
+import com.sonnt.fp_be.features.shared.services.*
 import com.sonnt.fp_be.model.entities.DriverStatus
 import com.sonnt.fp_be.model.entities.order.OrderStatus
 import com.sonnt.fp_be.repos.DriverRepo
@@ -20,7 +18,9 @@ class DriverOrderService: BaseService() {
     @Autowired lateinit var driverRepo: DriverRepo
     @Autowired lateinit var orderRepo: OrderRecordRepo
     @Autowired lateinit var orderTrackingService: OrderTrackingService
-    @Autowired lateinit var euOrderService: EUOrderService
+    @Autowired lateinit var orderInfoService: OrderInfoService
+
+    @Autowired lateinit var orderService: OrderService
 
     @Transactional(rollbackFor = [Exception::class, Throwable::class])
     fun acceptOrder(orderId: Long) {
@@ -28,33 +28,16 @@ class DriverOrderService: BaseService() {
         findDriverService.acceptOrderDeliveryRequest(orderId, driverId)
 
         val order = orderRepo.findById(orderId).get()
-        val driver = driverRepo.findById(driverId).get()
-        driver.status = DriverStatus.DELIVERING
 
-        order.driver = driver
-        order.status = OrderStatus.PREPARING
-
-        driverRepo.save(driver)
-        driverRepo.flush()
-        orderRepo.save(order)
-        orderRepo.flush()
-
-        val orderInfo = euOrderService.getOrderInfo(order)
-        val merchant = order.merchant ?: return
-
-        orderTrackingService.sendNewOrderRequestToMerchant(merchant, orderInfo)
-        orderTrackingService.sendSuccessFindingDriver(order)
+        orderService.driverAcceptOrder(order, driverId)
+        orderTrackingService.onSuccessFindingDriver(order)
     }
 
     fun arrivedAtMerchant(body: ArrivedAtMerchantRequest) {
         val orderId = body.orderId
         val order = orderRepo.findById(orderId).get()
 
-        order.status = OrderStatus.PICKING_UP
-
-        orderRepo.save(order)
-        orderRepo.flush()
-
+        orderService.driverArrivedAtMerchant(order)
         orderTrackingService.sendDriverArrivedToMerchant(order)
     }
 
@@ -62,12 +45,7 @@ class DriverOrderService: BaseService() {
         val orderId = body.orderId
         val order = orderRepo.findById(orderId).get()
 
-        order.billImageUrl = body.billImageUrl
-        order.status = OrderStatus.DELIVERING
-
-        orderRepo.save(order)
-        orderRepo.flush()
-
+        orderService.driverConfirmReceiveOrderFromMerchant(order, body.billImageUrl)
         orderTrackingService.sendDriverDeliveringToCustomer(order)
     }
 
@@ -82,20 +60,20 @@ class DriverOrderService: BaseService() {
         val orderId = body.orderId
         val order = orderRepo.findById(orderId).get()
 
-        order.deliveredEvidenceImageUrl = body.evidenceImageUrl
-        order.status = OrderStatus.SUCCEED
-
-        orderRepo.save(order)
-        orderRepo.flush()
-
-        val driverId = driverRepo.findDriverIdByUserId(userId)
-        val driver = driverRepo.findById(driverId).get()
-        driver.status = DriverStatus.IDLE
-        driverRepo.save(driver)
-        driverRepo.flush()
-
+        orderService.driverConfirmCompletedOrder(order, body.evidenceImageUrl)
         orderTrackingService.sendOrderCompleted(order)
     }
 
+    fun getDriverActiveOrder(): OrderInfo? {
+        val driverId = driverRepo.findDriverIdByUserId(userId)
+        val order = orderRepo.findActiveOrderOfDriver(driverId) ?: return null
+        return orderInfoService.getOrderInfo(order)
+    }
+
+    fun cancelOrder(orderId: Long) {
+        val order = orderRepo.findById(orderId).get()
+        orderService.cancelOrder(order)
+        orderTrackingService.merchantCanceledOrder(order)
+    }
 
 }

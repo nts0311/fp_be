@@ -3,6 +3,7 @@ package com.sonnt.fp_be.model.entities.order
 import com.sonnt.fp_be.model.entities.*
 import com.sonnt.fp_be.model.entities.product.ProductStatus
 import java.time.LocalDateTime
+import java.time.LocalTime
 import javax.persistence.*
 
 enum class OrderStatus(val value: String) {
@@ -25,25 +26,27 @@ class OrderRecord(
 
     var createDate: LocalDateTime = LocalDateTime.now(),
 
+    var driverAcceptTime: LocalDateTime? = null,
+
     var note: String? = null,
 
     @OneToMany(fetch = FetchType.LAZY, cascade = [CascadeType.ALL])
     @JoinColumn(name = "order_id")
     var items: MutableList<OrderItem> = mutableListOf(),
 
-    @OneToOne(fetch = FetchType.LAZY, orphanRemoval = true)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customer_id")
     var customer: Customer? = null,
 
-    @OneToOne(fetch = FetchType.LAZY, orphanRemoval = true)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "merchant_id")
     var merchant: Merchant? = null,
 
-    @OneToOne(fetch = FetchType.LAZY, orphanRemoval = true)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "driver_id")
     var driver: Driver? = null,
 
-    @OneToOne(fetch = FetchType.LAZY, orphanRemoval = true)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "receiving_address_id")
     var receivingAddress: Address? = null,
 

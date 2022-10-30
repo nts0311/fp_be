@@ -5,7 +5,7 @@ import com.sonnt.fp_be.exceptions.FPResponseStatus
 import com.sonnt.fp_be.features.shared.controllers.BaseController
 import com.sonnt.fp_be.features.auth.response.AuthRequest
 import com.sonnt.fp_be.features.auth.response.RegisterRequest
-import com.sonnt.fp_be.features.shared.request.UpdateFcmTokenRequest
+import com.sonnt.fp_be.features.auth.response.UpdateFcmTokenRequest
 import com.sonnt.fp_be.features.auth.response.AuthenticationResponse
 import com.sonnt.fp_be.features.auth.services.CustomerService
 import com.sonnt.fp_be.features.auth.services.DriverAuthService
@@ -14,7 +14,6 @@ import com.sonnt.fp_be.model.entities.Account
 import com.sonnt.fp_be.utils.JwtUtils
 import com.sonnt.fp_be.utils.badRequest
 import com.sonnt.fp_be.utils.ok
-import com.sonnt.fp_be.utils.unauthorized
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
 import org.springframework.security.authentication.AuthenticationManager

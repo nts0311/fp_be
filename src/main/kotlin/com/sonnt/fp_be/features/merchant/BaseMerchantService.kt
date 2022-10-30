@@ -13,9 +13,8 @@ class BaseMerchantService: BaseService() {
     @Autowired
     lateinit var merchantRepo: MerchantRepo
 
-    val currentMerchantId: Long by lazy {
-        merchantRepo.findMerchantByAccountId(userId).id
-    }
+    val currentMerchantId: Long
+        get() = merchantRepo.findMerchantByAccountId(userId).id
 
     @Throws(BusinessException::class)
     fun checkValidMerchant(merchantId: Long?) {

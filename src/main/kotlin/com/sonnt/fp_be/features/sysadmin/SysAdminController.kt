@@ -3,6 +3,7 @@ package com.sonnt.fp_be.features.sysadmin
 import com.sonnt.fp_be.features.shared.controllers.BaseController
 import com.sonnt.fp_be.features.shared.dto.ProductCategoryDTO
 import com.sonnt.fp_be.features.shared.response.ProductCategoryResponse
+import com.sonnt.fp_be.features.shared.services.FcmService
 import com.sonnt.fp_be.features.shared.services.ProductCategoryService
 import com.sonnt.fp_be.utils.ok
 import org.springframework.beans.factory.annotation.Autowired
@@ -21,4 +22,13 @@ class SysAdminController: BaseController() {
         return ok()
     }
 
+    @GetMapping("/delete-order")
+    fun deleteOrder(@RequestParam orderId: Long) {
+        adminService.deleteOrderBy(orderId)
+    }
+
+    @GetMapping("/push-noti")
+    fun pushNoti(@RequestParam username: String) {
+        adminService.pushTestNoti(username)
+    }
 }

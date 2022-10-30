@@ -13,6 +13,6 @@ class Customer(
     var account: Account,
 
     @OneToMany(fetch = FetchType.LAZY, cascade = [CascadeType.ALL])
-    var address: List<Address> = listOf(),
+    var address: MutableList<Address> = mutableListOf(),
 ) {
 }

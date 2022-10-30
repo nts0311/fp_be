@@ -16,6 +16,7 @@ data class OrderInfo(
     val orderId: Long,
     val orderStatus: String,
     val createdDate: LocalDateTime,
+    val driverAcceptTime: LocalDateTime?,
     val fromAddress: FPAddressDTO,
     val toAddress: FPAddressDTO,
     val routeInfo: OrderEstimatedRouteInfo,

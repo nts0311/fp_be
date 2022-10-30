@@ -17,11 +17,21 @@ class OrderTrackingService: BaseService() {
     val WS_DRIVER_ORDER_DELIVERY_REQUEST = "/ws/driver/newOrderRequest"
     val WS_DRIVER_ORDER_STATUS = "/ws/driver/orderStatus"
     val WS_EU_ORDER_STATUS = "/ws/eu/orderStatus"
-    val WS_MERCHANT_ORDER_STATUS = "/ws/eu/orderStatus"
-    val WS_MERCHANT_ORDERS = "/ws/merchant/orders"
+    val WS_MERCHANT_ORDER_STATUS = "/ws/merchant/orderStatus"
+    val WS_MERCHANT_ORDERS = "/ws/merchant/newOrderRequest"
 
     @Autowired
     private lateinit var wsMessageService: WSMessageService
+
+    @Autowired
+    lateinit var orderInfoService: OrderInfoService
+
+    fun onSuccessFindingDriver(order: OrderRecord) {
+        val orderInfo = orderInfoService.getOrderInfo(order)
+        val merchant = order.merchant ?: return
+        sendNewOrderRequestToMerchant(merchant, orderInfo)
+        sendSuccessFindingDriver(order)
+    }
 
     fun sendNewOrderRequestToDriver(driver: Driver, orderInfo: OrderInfo) {
         println("Send new order request to: ${driver.id}")

@@ -37,23 +37,23 @@ class EUOrderController: BaseController() {
 
     @GetMapping("get-info")
     fun getOrderInfo(@RequestParam orderId: Long): ResponseEntity<*> {
-        return ok(orderService.getOrderInfo(orderId))
+        return ok(orderService.getOrderInfo(orderId) as Any)
     }
 
     @Autowired lateinit var orderRecordRepo: OrderRecordRepo
     @Autowired lateinit var findDriverService: FindDriverService
     @Autowired lateinit var driverRepo: DriverRepo
 
-    @GetMapping("test")
-    fun getOrder(): ResponseEntity<*> {
-        val order = orderRecordRepo.findById(503).get()
-        val orderInfo = orderService.getOrderInfo(order)
-        val driver = driverRepo.findAll().first()
-
-        //findDriverService.sendNewOrderRequestToDriver(driver, orderInfo)
-
-        return ok()
-    }
+//    @GetMapping("test")
+//    fun getOrder(): ResponseEntity<*> {
+//        val order = orderRecordRepo.findById(503).get()
+//        val orderInfo = orderService.getOrderInfo(order)
+//        val driver = driverRepo.findAll().first()
+//
+//        //findDriverService.sendNewOrderRequestToDriver(driver, orderInfo)
+//
+//        return ok()
+//    }
 
     @GetMapping("get-active-order")
     fun getActiveOrder(): ResponseEntity<*> {

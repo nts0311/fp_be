@@ -4,6 +4,7 @@ import com.sonnt.fp_be.features.enduser.home.request.GetNearbyMerchantRequest
 import com.sonnt.fp_be.features.enduser.home.response.GetHomeSectionResponse
 import com.sonnt.fp_be.features.enduser.home.response.NearByMerchantResponse
 import com.sonnt.fp_be.features.enduser.info.response.CurrentLocationResponse
+import com.sonnt.fp_be.features.enduser.info.response.GetUserLocationListResponse
 import com.sonnt.fp_be.features.shared.controllers.BaseController
 import com.sonnt.fp_be.features.shared.dto.FPAddressDTO
 import com.sonnt.fp_be.features.shared.model.Cord
@@ -21,5 +22,16 @@ class EUInfoController: BaseController() {
     @PostMapping("current-address")
     fun getUserLocation(@RequestBody address: FPAddressDTO): ResponseEntity<*> {
         return ok(CurrentLocationResponse(euInfoService.getUserLocation(address)))
+    }
+
+    @GetMapping("location-list")
+    fun getUserLocationList(): ResponseEntity<*> {
+        return ok(GetUserLocationListResponse(euInfoService.getUserLocationList()))
+    }
+
+    @PostMapping("add-location")
+    fun addLocation(@RequestBody location: FPAddressDTO): ResponseEntity<*> {
+        euInfoService.addUserLocation(location)
+        return ok()
     }
 }
