@@ -12,6 +12,10 @@ class Customer(
     @JoinColumn(name = "account_id")
     var account: Account,
 
+    @OneToOne(fetch = FetchType.LAZY,  cascade = [CascadeType.PERSIST, CascadeType.REMOVE])
+    @JoinColumn(name = "current_address_id")
+    var currentAddress: Address? = null,
+
     @OneToMany(fetch = FetchType.LAZY, cascade = [CascadeType.ALL])
     var address: MutableList<Address> = mutableListOf(),
 ) {

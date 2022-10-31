@@ -20,6 +20,7 @@ import com.sonnt.fp_be.repos.OrderRecordRepo
 import com.sonnt.fp_be.repos.product.ProductRepo
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
+import java.time.Instant
 import java.util.*
 
 @Service
@@ -95,6 +96,7 @@ class OrderInfoService: BaseService() {
         return DistanceMatrixApi.newRequest(mapApiContext)
             .origins(addr1)
             .destinations(addr2)
+            .departureTime(Instant.now())
             .trafficModel(TrafficModel.PESSIMISTIC)
             .mode(TravelMode.DRIVING)
             .departureTime(Date().toInstant())

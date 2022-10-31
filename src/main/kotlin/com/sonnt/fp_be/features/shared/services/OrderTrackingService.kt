@@ -7,6 +7,7 @@ import com.sonnt.fp_be.features.shared.model.toDTO
 import com.sonnt.fp_be.model.entities.Driver
 import com.sonnt.fp_be.model.entities.Merchant
 import com.sonnt.fp_be.model.entities.extension.getCustomerUsername
+import com.sonnt.fp_be.model.entities.extension.getDriverUsername
 import com.sonnt.fp_be.model.entities.extension.getMerchantUsername
 import com.sonnt.fp_be.model.entities.order.OrderRecord
 import org.springframework.beans.factory.annotation.Autowired
@@ -114,7 +115,7 @@ class OrderTrackingService: BaseService() {
 
 
     fun sendOrderCanceledToDriver(order: OrderRecord, reason: String) {
-        val driverUsername = order.getCustomerUsername()
+        val driverUsername = order.getDriverUsername()
 
         val body = CanceledOrderMessage(order.id, reason)
 
