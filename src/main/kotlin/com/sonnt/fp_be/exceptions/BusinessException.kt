@@ -9,7 +9,7 @@ enum class FPResponseStatus(val code: String = "0", val httpStatus: HttpStatus =
     ok(httpStatus = HttpStatus.OK),
     notFoung(httpStatus = HttpStatus.NOT_FOUND),
     badRequest(httpStatus = HttpStatus.BAD_REQUEST),
-    unauthorized(httpStatus = HttpStatus.UNAUTHORIZED, message = "Không có quyền"),
+    unauthorized(httpStatus = HttpStatus.UNAUTHORIZED, message = "'Không có quyền"),
     systemError(code = "-1", httpStatus = HttpStatus.INTERNAL_SERVER_ERROR, "Lỗi hệ thống"),
 
     merchantNotFound(code = "1", httpStatus = HttpStatus.NOT_FOUND, "Không tìm thấy nhà hàng"),

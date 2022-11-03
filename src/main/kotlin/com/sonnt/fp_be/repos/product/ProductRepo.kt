@@ -11,4 +11,6 @@ interface ProductRepo: JpaRepository<Product, Long> {
     @Modifying
     @Query("UPDATE Product p SET p.tag = NULL WHERE p.tag.id = :tagId")
     fun clearTag(tagId: Long)
+
+    fun findAllByTagId(menuId: Long): List<Product>
 }

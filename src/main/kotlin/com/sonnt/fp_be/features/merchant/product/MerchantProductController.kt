@@ -31,6 +31,15 @@ class MerchantProductController : BaseController() {
         return ok(responseBody)
     }
 
+    @GetMapping("get-by-menu")
+    fun getProductByMenu(
+        @RequestParam menuId: Long
+    ): ResponseEntity<*> {
+        val productList = merchantProductService.getProductByMenu(menuId)
+        val responseBody = ProductListResponse(products = productList)
+        return ok(responseBody)
+    }
+
     @PostMapping("/add")
     fun addProduct(@RequestBody productDto: ProductDTO): ResponseEntity<*> {
         val result = merchantProductService.addProduct(productDto)

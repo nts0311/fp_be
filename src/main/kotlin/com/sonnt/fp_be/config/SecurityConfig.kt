@@ -37,7 +37,7 @@ class SecurityConfig(): WebSecurityConfigurerAdapter() {
         http?.run {
             csrf().disable()
             sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-            authorizeRequests().antMatchers("/merchant/tag/list").hasAnyRole("CUSTOMER", "MERCHANT")
+            authorizeRequests().antMatchers("/merchant/menu/list").hasAnyRole("CUSTOMER", "MERCHANT")
             authorizeRequests().antMatchers("/merchant/product/list").hasAnyRole("CUSTOMER", "MERCHANT")
 
             authorizeRequests().antMatchers("/sysadmin/**").hasRole("SYSADMIN")

@@ -18,7 +18,7 @@ class MerchantProductService: BaseMerchantService() {
     @Autowired
     lateinit var productCategoryRepo: ProductCategoryRepo
     @Autowired
-    lateinit var productTagRepo: ProductTagRepo
+    lateinit var productMenuRepo: ProductMenuRepo
 
     fun getProductByMerchantId(merchantId: Long?, page: Int? = 0, size: Int? = 20): List<ProductDTO> {
         val pageable = PageRequest.of(page ?: 0, size ?: 20)
@@ -61,9 +61,13 @@ class MerchantProductService: BaseMerchantService() {
         if (!productCategoryRepo.existsById(productDTO.categoryId ?: 0))
             throw BusinessException(FPResponseStatus.categoryNotFound)
 
-        if (productDTO.tagId != null && !productTagRepo.existsById(productDTO.tagId!!))
+        if (productDTO.tagId != null && !productMenuRepo.existsById(productDTO.tagId!!))
             throw BusinessException(FPResponseStatus.tagNotFound)
 
+    }
+
+    fun getProductByMenu(menuId: Long): List<ProductDTO> {
+        return productRepo.findAllByTagId(menuId).toProductDTO()
     }
 
 }

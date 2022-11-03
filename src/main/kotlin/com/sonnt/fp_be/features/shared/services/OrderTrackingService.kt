@@ -53,6 +53,7 @@ class OrderTrackingService: BaseService() {
     }
 
     fun sendNotSuccessFindingDriver(order: OrderRecord) {
+        println("Send no driver: ${order.customer?.account?.username ?: ""}")
         sendOrderCanceledToCustomer(order, "Không tìm được tài xế")
     }
 
@@ -77,16 +78,18 @@ class OrderTrackingService: BaseService() {
 
     fun sendOrderCompleted(order: OrderRecord) {
         val customerUsername = order.getCustomerUsername()
-        val merchantUsername = order.getCustomerUsername()
+        val merchantUsername = order.getMerchantUsername()
 
         customerUsername?.let {
             val messageToCustomer = WSMessageWrapper(WS_EU_ORDER_STATUS, customerUsername, WSMessageCode.ORDER_COMPLETED, "${order.id}")
             wsMessageService.sendMessage(messageToCustomer)
+            println("Send order done to customer:$customerUsername")
         }
 
         merchantUsername?.let {
-            val messageToCustomer = WSMessageWrapper(WS_MERCHANT_ORDER_STATUS, merchantUsername, WSMessageCode.ORDER_COMPLETED, "${order.id}")
+            val messageToCustomer = WSMessageWrapper(WS_MERCHANT_ORDER_STATUS, merchantUsername, WSMessageCode.ORDER_COMPLETED, order.id)
             wsMessageService.sendMessage(messageToCustomer)
+            println("Send order done to merchant:$merchantUsername")
         }
     }
 

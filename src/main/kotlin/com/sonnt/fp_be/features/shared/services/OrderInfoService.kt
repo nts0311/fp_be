@@ -5,6 +5,7 @@ import com.google.maps.model.DistanceMatrix
 import com.google.maps.model.LatLng
 import com.google.maps.model.TrafficModel
 import com.google.maps.model.TravelMode
+import com.sonnt.fp_be.exceptions.BusinessException
 import com.sonnt.fp_be.features.enduser.order.model.OrderPaymentInfo
 import com.sonnt.fp_be.features.enduser.order.model.UserProductSelection
 import com.sonnt.fp_be.features.enduser.order.response.OrderInfo
@@ -27,6 +28,7 @@ import java.util.*
 class OrderInfoService: BaseService() {
     @Autowired lateinit var orderRepo: OrderRecordRepo
     @Autowired lateinit var productRepo: ProductRepo
+    @Autowired lateinit var goongService: GoongService
 
     val serviceFee = 2000.0
     val deliveryFeePerKm = 10000
@@ -76,8 +78,9 @@ class OrderInfoService: BaseService() {
         val merchantAddress = LatLng(addr1.lat, addr1.lng)
         val euAddress = LatLng(addr2.lat, addr2.lng)
 
-        val result = distanceMatrix(merchantAddress, euAddress).rows.first().elements.first()
-        return OrderEstimatedRouteInfo(0, result.duration.inSeconds, result.distance.inMeters, result.distance.humanReadable)
+        //val result = distanceMatrix(merchantAddress, euAddress).rows.first().elements.first()
+        //return OrderEstimatedRouteInfo(0, result.duration.inSeconds, result.distance.inMeters, result.distance.humanReadable)
+        return goongService.getOrderEstimateRoute(addr1, addr2)!!
     }
 
     private fun calculatePrice(cartProducts: List<UserProductSelection>): Double {

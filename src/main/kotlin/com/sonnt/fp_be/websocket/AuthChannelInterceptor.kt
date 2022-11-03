@@ -29,6 +29,7 @@ class AuthChannelInterceptor: ChannelInterceptor {
 
                 val securityToken = jwtUtils.getSecurityAuthToken(jwt) ?: throw BadCredentialsException("Invalid credentials")
                 accessor.user = securityToken
+                println("Connected ws:${accessor.user?.name ?: ""}")
             }
         }
 

@@ -4,7 +4,7 @@ import com.sonnt.fp_be.features.enduser.order.model.AttributeSelection
 import com.sonnt.fp_be.features.shared.dto.ProductAttributeDTO
 import com.sonnt.fp_be.features.shared.dto.ProductAttributeOptionDTO
 import com.sonnt.fp_be.features.shared.dto.ProductDTO
-import com.sonnt.fp_be.features.shared.dto.ProductTagDTO
+import com.sonnt.fp_be.features.shared.dto.ProductMenuDTO
 import com.sonnt.fp_be.model.entities.product.Product
 import com.sonnt.fp_be.model.entities.product.ProductAttribute
 import com.sonnt.fp_be.model.entities.product.ProductAttributeOption
@@ -40,8 +40,8 @@ fun Product.toDTO(): ProductDTO {
 
 fun List<Product>.toProductDTO() = this.map { it.toDTO() }
 
-fun ProductTag.toDTO(): ProductTagDTO {
-    return sharedModelMapper.map(this, ProductTagDTO::class.java).apply {
+fun ProductTag.toDTO(): ProductMenuDTO {
+    return sharedModelMapper.map(this, ProductMenuDTO::class.java).apply {
         this.merchantId = merchant.id
     }
 }

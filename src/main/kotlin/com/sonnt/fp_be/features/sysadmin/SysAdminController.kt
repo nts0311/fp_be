@@ -31,4 +31,9 @@ class SysAdminController: BaseController() {
     fun pushNoti(@RequestParam username: String) {
         adminService.pushTestNoti(username)
     }
+
+    @GetMapping("/send-order-complete")
+    fun pushNoti(@RequestParam orderId: Long) {
+        adminService.sendOrderCompleted(orderId)
+    }
 }
