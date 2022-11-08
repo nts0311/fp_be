@@ -10,12 +10,15 @@ import com.sonnt.fp_be.features.enduser.order.response.GetOrderCheckinInfoRespon
 import com.sonnt.fp_be.features.enduser.order.response.OrderInfo
 import com.sonnt.fp_be.features.shared.services.FindDriverService
 import com.sonnt.fp_be.features.shared.services.OrderInfoService
+import com.sonnt.fp_be.model.entities.extension.isOpening
 import com.sonnt.fp_be.model.entities.order.*
+import com.sonnt.fp_be.model.entities.product.ProductStatus
 import com.sonnt.fp_be.repos.AddressRepo
 import com.sonnt.fp_be.repos.OrderRecordRepo
 import com.sonnt.fp_be.repos.product.ProductRepo
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
+import java.time.LocalTime
 
 @Service
 class EUOrderService: EndUserBaseService() {
@@ -49,6 +52,16 @@ class EUOrderService: EndUserBaseService() {
         val merchantAddress = merchant.address ?: throw BusinessException(FPResponseStatus.notFoung)
         val euAddress = addressRepo.findById(request.addressId).get()
         val orderEstimatedRouteInfo = orderInfoService.getOrderEstimateRoute(merchantAddress, euAddress)
+
+        if (!merchant.isOpening()) {
+            throw BusinessException(FPResponseStatus.merchantClosed)
+        }
+
+        orderItems.forEach {orderItem ->
+            if (productRepo.getStatusOfProduct(orderItem.product.id) != ProductStatus.AVAILABLE){
+                throw BusinessException(FPResponseStatus.productNotAvailable)
+            }
+        }
 
         val newOrder = OrderRecord(
             note = request.note,

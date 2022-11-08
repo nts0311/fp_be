@@ -13,6 +13,7 @@ interface MerchantRepo : JpaRepository<Merchant, Long> {
     @Query(
         value = "SELECT * FROM merchant " +
                 "         INNER JOIN address a ON merchant.address_id = a.id " +
+                "WHERE merchant.is_opening=true AND (current_time() between merchant.opening_hour and merchant.closing_hour) " +
                 "ORDER BY (6371 * acos(cos(radians(:lat)) * cos(radians(a.lat)) * cos(radians(a.lng) - radians(:long)) +" +
                 "                      sin(radians(:lat)) * sin(radians(a.lat)))) " +
                 "LIMIT :pageSize OFFSET :page"
@@ -20,14 +21,34 @@ interface MerchantRepo : JpaRepository<Merchant, Long> {
     )
     fun findNearestMerchantByCord(lat: Double, long: Double, pageSize: Int = 10, page: Int = 0): List<Merchant>
 
+//    @Query(
+//        value = "SELECT DISTINCT merchant.* FROM merchant " +
+//                "inner join product p on merchant.id = p.merchant_id " +
+//                "inner join product_category pc on p.category_id = pc.id " +
+//                "WHERE p.category_id=:categoryId"
+//        , nativeQuery = true
+//    )
+//    fun findMerchantsWithCategory(categoryId: Long, pageable: Pageable): List<Merchant>
+
     @Query(
         value = "SELECT DISTINCT merchant.* FROM merchant " +
-                "inner join product p on merchant.id = p.merchant_id" +
+                "inner join product p on merchant.id = p.merchant_id " +
                 "inner join product_category pc on p.category_id = pc.id " +
-                "WHERE category_id=:categoryId and merchant.name like '%:searchKey%'"
+                "WHERE p.category_id=:categoryId and merchant.name like CONCAT('%', :searchKey, '%') " +
+                "AND merchant.is_opening=true AND (current_time() between merchant.opening_hour and merchant.closing_hour)"
+
         , nativeQuery = true
     )
-    fun findMerchantsWithCategory(categoryId: Long, @Param("searchKey") searchKey: String, pageable: Pageable): Page<List<Merchant>>
+    fun findMerchantsWithCategory(categoryId: Long, searchKey: String, pageable: Pageable): List<Merchant>
 
-    fun findMerchantsByNameLikeIgnoreCase(name: String, pageable: Pageable): Page<List<Merchant>>
+    @Query(
+        value = "SELECT * FROM merchant " +
+                "WHERE merchant.name like CONCAT('%', :name, '%') " +
+                "AND merchant.is_opening=true AND (current_time() between merchant.opening_hour and merchant.closing_hour)"
+
+        , nativeQuery = true
+    )
+    fun findMerchantsWithName(name: String, pageable: Pageable): List<Merchant>
+
+    fun findMerchantByName(name: String): Merchant
 }

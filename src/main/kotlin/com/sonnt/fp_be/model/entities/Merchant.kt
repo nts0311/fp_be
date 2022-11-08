@@ -1,6 +1,8 @@
 package com.sonnt.fp_be.model.entities
 
 import com.sonnt.fp_be.model.entities.stats.MerchantStat
+import org.hibernate.annotations.ColumnDefault
+import java.time.LocalTime
 import javax.persistence.*
 
 @Entity
@@ -23,6 +25,10 @@ class Merchant(
     val subTitle: String? = null,
     val description: String? = null,
     val imageUrl: String? = null,
-    val name: String? = null
+    val name: String? = null,
+    @ColumnDefault("true")
+    var isOpening: Boolean = true,
+    var openingHour: LocalTime = LocalTime.of(7,0),
+    var closingHour: LocalTime = LocalTime.of(21,0)
 ) {
 }

@@ -48,7 +48,6 @@ class MerchantProductService: BaseMerchantService() {
         productRepo.save(product)
         productRepo.flush()
     }
-
     @Throws(Exception::class)
     fun checkValidFoodParams(productDTO: ProductDTO) {
         val merchantId = productDTO.merchantId ?: throw BusinessException(FPResponseStatus.merchantNotFound)

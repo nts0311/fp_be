@@ -15,4 +15,8 @@ interface OrderRecordRepo: JpaRepository<OrderRecord, Long> {
     @Query(value = "SELECT * FROM orders WHERE merchant_id=:merchantId AND status<>'SUCCEED' AND status<>'CANCELED'",
         nativeQuery = true)
     fun findActiveOrdersOfMerchant(merchantId: Long): List<OrderRecord>
+
+    @Query(value = "SELECT * FROM orders WHERE status='SUCCEED' AND create_date like CONCAT(:date, '%')",
+    nativeQuery = true)
+    fun findDoneOrderInDay(date: String): List<OrderRecord>
 }

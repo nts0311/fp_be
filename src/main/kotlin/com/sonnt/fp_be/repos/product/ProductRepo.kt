@@ -1,6 +1,7 @@
 package com.sonnt.fp_be.repos.product
 
 import com.sonnt.fp_be.model.entities.product.Product
+import com.sonnt.fp_be.model.entities.product.ProductStatus
 import org.springframework.data.domain.Pageable
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Modifying
@@ -13,4 +14,7 @@ interface ProductRepo: JpaRepository<Product, Long> {
     fun clearTag(tagId: Long)
 
     fun findAllByTagId(menuId: Long): List<Product>
+
+    @Query("SELECT p.status from Product p WHERE p.id = :id")
+    fun getStatusOfProduct(id: Long): ProductStatus
 }

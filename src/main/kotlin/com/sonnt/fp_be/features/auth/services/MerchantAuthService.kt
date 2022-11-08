@@ -22,7 +22,7 @@ class MerchantAuthService {
     fun registerMerchant(account: Account) {
         account.password = passwordEncoder.encode(account.password)
         account.role = "MERCHANT"
-        val merchant = Merchant(account = account)
+        val merchant = Merchant(account = account, name = account.name)
         merchantRepo.save(merchant)
         merchantRepo.flush()
     }

@@ -5,12 +5,16 @@ import com.sonnt.fp_be.features.enduser.home.model.HomeSection
 import com.sonnt.fp_be.features.shared.dto.HomeBannerDTO
 import com.sonnt.fp_be.features.shared.model.Cord
 import com.sonnt.fp_be.features.shared.dto.MerchantItemDTO
+import com.sonnt.fp_be.model.entities.Merchant
 import com.sonnt.fp_be.model.entities.extension.toItemDTO
 import com.sonnt.fp_be.model.entities.extension.toMerchantItemList
 import com.sonnt.fp_be.repos.MerchantRepo
 import com.sonnt.fp_be.utils.GPSUtils
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.autoconfigure.data.web.SpringDataWebProperties.Pageable
+import org.springframework.data.domain.PageRequest
 import org.springframework.stereotype.Service
+import org.springframework.web.bind.annotation.RequestParam
 
 @Service
 class EUHomeService: EndUserBaseService() {
@@ -58,9 +62,27 @@ class EUHomeService: EndUserBaseService() {
 
     fun getHomeBanner(): List<HomeBannerDTO> {
         return listOf(
-            HomeBannerDTO(imageUrl = "https://i.postimg.cc/vTGr5Cgm/Rectangle-158.png", deepLink = "https://www.youtube.com/watch?v=7rnCUqFec3A"),
-            HomeBannerDTO(imageUrl = "https://i.postimg.cc/RFBKz2TT/Rectangle-158-1.png", deepLink = "https://www.figma.com/file/1FzgoLxUQypQaNeX2GWIRy/CC-Portal?node-id=0%3A1"),
-            HomeBannerDTO()
+            HomeBannerDTO(imageUrl = "https://images.foody.vn/images/blogs/foody-upload-api-foody-1170x370%20(7)-637196926940136811-200313103813.jpg", deepLink = "https://www.youtube.com/watch?v=7rnCUqFec3A"),
+            HomeBannerDTO(imageUrl = "https://xinmagiamgia.com/wp-content/uploads/2020/02/Screenshot_10.jpg", deepLink = "https://www.figma.com/file/1FzgoLxUQypQaNeX2GWIRy/CC-Portal?node-id=0%3A1"),
+            HomeBannerDTO(imageUrl = "https://media.thanhnienviet.vn/uploads/2021/04/30/bia-1619752854.jpg")
         )
+    }
+
+    fun findMerchant(categoryId: Long?, searchKey: String?, page: Int, size: Int): List<MerchantItemDTO> {
+        val page = PageRequest.of(page, size)
+
+        val listMerchant = if (categoryId == null) {
+            if (searchKey == null)
+                return listOf()
+            else
+                merchantRepo.findMerchantsWithName(searchKey, page)
+        } else {
+            if (searchKey == null)
+                merchantRepo.findMerchantsWithCategory(categoryId, "",page)
+            else
+                merchantRepo.findMerchantsWithCategory(categoryId, searchKey, page)
+        }
+
+        return listMerchant.toMerchantItemList()
     }
 }

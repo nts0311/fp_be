@@ -1,6 +1,7 @@
 package com.sonnt.fp_be.features.merchant.order
 
 import com.sonnt.fp_be.features.merchant.order.dto.GetMerchantActiveOrdersResponse
+import com.sonnt.fp_be.features.merchant.order.dto.GetMerchantDoneOrdersResponse
 import com.sonnt.fp_be.features.shared.controllers.BaseController
 import com.sonnt.fp_be.utils.ok
 import org.springframework.beans.factory.annotation.Autowired
@@ -24,6 +25,12 @@ class MerchantOrderController: BaseController() {
     fun cancelOrder(@RequestParam("orderId") orderId: Long): ResponseEntity<*> {
         orderService.cancelOrder(orderId)
         return ok()
+    }
+
+    @GetMapping("/done-orders-in-day")
+    fun getDoneOrderInDay(): ResponseEntity<*> {
+        val doneOrders = orderService.getDoneOrderInDay()
+        return ok(GetMerchantDoneOrdersResponse(doneOrders))
     }
 
 }

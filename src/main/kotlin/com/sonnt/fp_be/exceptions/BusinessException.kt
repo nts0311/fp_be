@@ -22,6 +22,9 @@ enum class FPResponseStatus(val code: String = "0", val httpStatus: HttpStatus =
 
     cartEmpty(code = "7", httpStatus = HttpStatus.BAD_REQUEST, "Đơn hàng trống"),
 
+    merchantClosed(code = "8", httpStatus = HttpStatus.BAD_REQUEST, "Nhà hàng đã đóng cửa"),
+    productNotAvailable(code = "9", httpStatus = HttpStatus.BAD_REQUEST, "Sản phẩm tạm hết"),
+
 }
 
 class BusinessException(

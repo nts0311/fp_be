@@ -10,13 +10,13 @@ import kotlin.random.Random
 @Component
 class EndUserDailyNotificationTask {
     val titles = listOf(
-        "title 1",
+        "Bữa trưa chỉ 30K mại dzô!",
         "title 2",
         "title 3"
     )
 
     val contents = listOf(
-        "content 1",
+        "Bánh mì, xôi, bún, cơm,... Thèm gì order luôn nhé!",
         "content 2",
         "content 3"
     )
