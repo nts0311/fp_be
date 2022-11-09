@@ -11,6 +11,7 @@ import com.sonnt.fp_be.features.enduser.order.response.OrderInfo
 import com.sonnt.fp_be.features.merchant.BaseMerchantService
 import com.sonnt.fp_be.features.merchant.info.dto.ChangeMerchantActiveHourRequest
 import com.sonnt.fp_be.features.merchant.info.dto.ChangeMerchantActivityStatusRequest
+import com.sonnt.fp_be.features.merchant.info.dto.GetMerchantInfoResponse
 import com.sonnt.fp_be.features.shared.services.FindDriverService
 import com.sonnt.fp_be.features.shared.services.OrderInfoService
 import com.sonnt.fp_be.features.shared.services.OrderService
@@ -33,15 +34,38 @@ import java.util.Date
 class MerchantInfoService: BaseMerchantService() {
     fun changeActivityRequest(request: ChangeMerchantActivityStatusRequest) {
         val merchant = merchantRepo.findById(currentMerchantId).get()
-        merchant.isOpening = request.isOpen
-        merchantRepo.save(merchant)
-        merchantRepo.flush()
+        request.open?.also {
+            merchant.isOpening = it
+            merchantRepo.save(merchant)
+            merchantRepo.flush()
+        }
     }
 
     fun changeActiveHour(request: ChangeMerchantActiveHourRequest) {
-        val openingHour = LocalTime.parse(request.openingHour)
-        val closingHour = LocalTime.parse(request.closingHour)
+        val merchant = merchantRepo.findById(currentMerchantId).get()
 
-        openingHour.toString()
+        request.openingHour?.also {
+            val openingHour = LocalTime.parse(request.openingHour)
+            merchant.openingHour = openingHour
+        }
+
+        request.closingHour?.also {
+            val closingHour = LocalTime.parse(request.closingHour)
+            merchant.closingHour = closingHour
+        }
+
+        if (request.openingHour != null || request.closingHour != null) {
+            merchantRepo.save(merchant)
+            merchantRepo.flush()
+        }
+    }
+
+    fun getMerchantInfo(): GetMerchantInfoResponse {
+        val merchant = merchantRepo.findById(currentMerchantId).get()
+        return GetMerchantInfoResponse(
+            isOpening = merchant.isOpening,
+            openingHour = merchant.openingHour.toString(),
+            closingHour = merchant.closingHour.toString()
+        )
     }
 }

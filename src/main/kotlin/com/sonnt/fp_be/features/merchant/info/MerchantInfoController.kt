@@ -1,5 +1,6 @@
 package com.sonnt.fp_be.features.merchant.info
 
+import com.sonnt.fp_be.features.merchant.info.dto.ChangeMerchantActiveHourRequest
 import com.sonnt.fp_be.features.merchant.info.dto.ChangeMerchantActivityStatusRequest
 import com.sonnt.fp_be.features.merchant.order.dto.GetMerchantActiveOrdersResponse
 import com.sonnt.fp_be.features.merchant.order.dto.GetMerchantDoneOrdersResponse
@@ -20,6 +21,17 @@ class MerchantInfoController: BaseController() {
     fun changeActivityStatus(@RequestBody request: ChangeMerchantActivityStatusRequest): ResponseEntity<*> {
         infoService.changeActivityRequest(request)
         return ok()
+    }
+
+    @PostMapping("change-active-hour")
+    fun changeActiveHour(@RequestBody request: ChangeMerchantActiveHourRequest): ResponseEntity<*> {
+        infoService.changeActiveHour(request)
+        return ok()
+    }
+
+    @GetMapping("get")
+    fun getMerchantInfo(): ResponseEntity<*> {
+        return ok(infoService.getMerchantInfo())
     }
 
 }
