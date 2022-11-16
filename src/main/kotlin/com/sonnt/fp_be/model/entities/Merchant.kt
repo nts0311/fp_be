@@ -24,7 +24,6 @@ class Merchant(
 
     val subTitle: String? = null,
     val description: String? = null,
-    val imageUrl: String? = null,
     val name: String? = null,
     @ColumnDefault("true")
     var isOpening: Boolean = true,

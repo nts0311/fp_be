@@ -5,7 +5,6 @@ import com.google.maps.model.DistanceMatrix
 import com.google.maps.model.LatLng
 import com.google.maps.model.TrafficModel
 import com.google.maps.model.TravelMode
-import com.sonnt.fp_be.exceptions.BusinessException
 import com.sonnt.fp_be.features.enduser.order.model.OrderPaymentInfo
 import com.sonnt.fp_be.features.enduser.order.model.UserProductSelection
 import com.sonnt.fp_be.features.enduser.order.response.OrderInfo
@@ -71,7 +70,8 @@ class OrderInfoService: BaseService() {
 
     fun getOrderPaymentInfo(distance: Long, cartProducts: List<UserProductSelection>): OrderPaymentInfo {
         val deliveryFee = distance.toDouble() / 1000 * deliveryFeePerKm
-        return OrderPaymentInfo(price = calculatePrice(cartProducts), deliveryFee = deliveryFee, serviceFee = serviceFee, discount = 0.0)
+        val priceInfo = calculateProductsPrice(cartProducts)
+        return OrderPaymentInfo(price = priceInfo.first, deliveryFee = deliveryFee, serviceFee = serviceFee, discount = 0.0, priceByProductId = priceInfo.second)
     }
 
     fun getOrderEstimateRoute(addr1: Address, addr2: Address): OrderEstimatedRouteInfo {
@@ -83,16 +83,19 @@ class OrderInfoService: BaseService() {
         return goongService.getOrderEstimateRoute(addr1, addr2)!!
     }
 
-    private fun calculatePrice(cartProducts: List<UserProductSelection>): Double {
+    fun calculateProductsPrice(cartProducts: List<UserProductSelection>): Pair<Double, Map<Long, Double>> {
         var totalPrice = 0.0
+
+        val priceByProductId = mutableMapOf<Long, Double>()
 
         for (productItem in cartProducts) {
             val product = productRepo.findById(productItem.productId).get()
             val productPrice = product.calculatePrice(productItem.attributeSelections) * productItem.num
+            priceByProductId[product.id] = (priceByProductId[product.id] ?: 0.0) + productPrice
             totalPrice += productPrice
         }
 
-        return totalPrice
+        return Pair(totalPrice, priceByProductId)
     }
 
     private fun distanceMatrix(addr1: LatLng, addr2: LatLng): DistanceMatrix {

@@ -43,6 +43,6 @@ class Product(
         name = "tag_id",
         referencedColumnName = "id"
     )
-    var tag: ProductTag? = null
+    var tag: ProductMenu? = null
 ) {
 }

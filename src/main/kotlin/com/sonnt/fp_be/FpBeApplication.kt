@@ -5,18 +5,15 @@ import com.google.firebase.FirebaseApp
 import com.google.firebase.FirebaseOptions
 import com.google.firebase.messaging.FirebaseMessaging
 import com.sonnt.fp_be.features.auth.services.MerchantAuthService
-import com.sonnt.fp_be.features.merchant.tag.MerchantTagService
 import com.sonnt.fp_be.features.shared.dto.ProductDTO
 import com.sonnt.fp_be.model.entities.Account
-import com.sonnt.fp_be.model.entities.product.Product
 import com.sonnt.fp_be.model.entities.product.ProductCategory
-import com.sonnt.fp_be.model.entities.product.ProductTag
+import com.sonnt.fp_be.model.entities.product.ProductMenu
 import com.sonnt.fp_be.repos.AccountRepo
 import com.sonnt.fp_be.repos.MerchantRepo
 import com.sonnt.fp_be.repos.product.ProductCategoryRepo
 import com.sonnt.fp_be.repos.product.ProductMenuRepo
 import com.sonnt.fp_be.repos.product.ProductRepo
-import com.sonnt.fp_be.utils.sharedModelMapper
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.CommandLineRunner
 import org.springframework.boot.autoconfigure.SpringBootApplication
@@ -62,7 +59,7 @@ class FpBeApplication: CommandLineRunner {
 
         val merchant = merchantRepo.findMerchantByName("${category.name} merchant ${mc+100}")
 
-        val tag = ProductTag(name = "test", merchant = merchant)
+        val tag = ProductMenu(name = "test", merchant = merchant)
         menuRepo.save(tag)
         menuRepo.flush()
 

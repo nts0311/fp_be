@@ -10,7 +10,6 @@ fun Merchant.toItemDTO(): MerchantItemDTO = MerchantItemDTO(
         id = id,
         name = account.name,
         subTitle = subTitle,
-        imageUrl = imageUrl,
         numStar =  stat?.numStar,
         numOrder = stat?.numOrder,
         address = address

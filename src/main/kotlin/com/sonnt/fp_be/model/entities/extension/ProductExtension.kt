@@ -8,7 +8,7 @@ import com.sonnt.fp_be.features.shared.dto.ProductMenuDTO
 import com.sonnt.fp_be.model.entities.product.Product
 import com.sonnt.fp_be.model.entities.product.ProductAttribute
 import com.sonnt.fp_be.model.entities.product.ProductAttributeOption
-import com.sonnt.fp_be.model.entities.product.ProductTag
+import com.sonnt.fp_be.model.entities.product.ProductMenu
 import com.sonnt.fp_be.utils.sharedModelMapper
 
 fun ProductAttributeOption.toDTO(): ProductAttributeOptionDTO {
@@ -40,13 +40,13 @@ fun Product.toDTO(): ProductDTO {
 
 fun List<Product>.toProductDTO() = this.map { it.toDTO() }
 
-fun ProductTag.toDTO(): ProductMenuDTO {
+fun ProductMenu.toDTO(): ProductMenuDTO {
     return sharedModelMapper.map(this, ProductMenuDTO::class.java).apply {
         this.merchantId = merchant.id
     }
 }
 
-fun List<ProductTag>.toProductTagDTO() = this.map { it.toDTO() }
+fun List<ProductMenu>.toProductTagDTO() = this.map { it.toDTO() }
 
 fun Product.calculatePrice(selectedAttrs: List<AttributeSelection>): Double {
     var result = price

@@ -3,8 +3,9 @@ package com.sonnt.fp_be.model.entities.product
 import com.sonnt.fp_be.model.entities.Merchant
 import javax.persistence.*
 
-@Entity
-class ProductTag(
+
+@Entity(name = "product_tag")
+class ProductMenu(
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     var id: Long = 0,

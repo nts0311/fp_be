@@ -24,6 +24,7 @@ enum class FPResponseStatus(val code: String = "0", val httpStatus: HttpStatus =
 
     merchantClosed(code = "8", httpStatus = HttpStatus.BAD_REQUEST, "Nhà hàng đã đóng cửa"),
     productNotAvailable(code = "9", httpStatus = HttpStatus.BAD_REQUEST, "Sản phẩm tạm hết"),
+    userExisted(code = "10", httpStatus = HttpStatus.BAD_REQUEST, "Tên người dùng đã tồn tại"),
 
 }
 

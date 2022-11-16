@@ -13,8 +13,7 @@ class Account(
     var name: String = "",
     var fcmToken: String = "",
     var role: String = "",
-    var isActive: Boolean = true,
-    var isLocked: Boolean = false,
-    var phone: String = ""
+    var phone: String = "",
+    var avatarUrl: String? = null,
 ) {
 }

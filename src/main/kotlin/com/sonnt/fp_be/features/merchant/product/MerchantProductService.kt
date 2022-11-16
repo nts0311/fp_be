@@ -26,7 +26,7 @@ class MerchantProductService: BaseMerchantService() {
     }
 
     fun addProduct(productDTO: ProductDTO): ProductDTO {
-
+        productDTO.merchantId = currentMerchantId
         checkValidFoodParams(productDTO)
 
         val product = productDTO.toDbModel()

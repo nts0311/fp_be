@@ -1,6 +1,5 @@
 package com.sonnt.fp_be.features.shared.dto
 
-import com.fasterxml.jackson.annotation.JsonProperty
 import com.sonnt.fp_be.model.entities.Merchant
 import com.sonnt.fp_be.model.entities.product.*
 import com.sonnt.fp_be.utils.sharedModelMapper
@@ -28,15 +27,15 @@ data class ProductDTO(
 
             categoryId?.also { product.category = ProductCategory(id = it) }
 
-            tagId?.also{ product.tag = ProductTag(id = it) }
+            tagId?.also{ product.tag = ProductMenu(id = it) }
         }
     }
 }
 
 data class ProductAttributeDTO(
     var id: Long? = null,
-    var isMultiple: Boolean = false,
-    var isRequired: Boolean = false,
+    var multiple: Boolean = false,
+    var required: Boolean = false,
     var productId: Long? = null,
     var name: String? = null,
     var options: List<ProductAttributeOptionDTO> = listOf()

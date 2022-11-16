@@ -1,8 +1,10 @@
 package com.sonnt.fp_be.repos
 
 import com.sonnt.fp_be.model.entities.order.OrderRecord
+import com.sonnt.fp_be.model.entities.order.OrderStatus
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Query
+import java.time.LocalDateTime
 
 interface OrderRecordRepo: JpaRepository<OrderRecord, Long> {
     @Query(value = "SELECT * FROM orders WHERE customer_id=:userId AND status<>'SUCCEED' AND status<>'CANCELED' LIMIT 1",
@@ -19,4 +21,6 @@ interface OrderRecordRepo: JpaRepository<OrderRecord, Long> {
     @Query(value = "SELECT * FROM orders WHERE status='SUCCEED' AND create_date like CONCAT(:date, '%')",
     nativeQuery = true)
     fun findDoneOrderInDay(date: String): List<OrderRecord>
+
+    fun findOrderRecordByCreateDateBetweenAndStatusOrderByCreateDate(fromDateTime: LocalDateTime, toDateTime: LocalDateTime, orderStatus: OrderStatus): List<OrderRecord>
 }
