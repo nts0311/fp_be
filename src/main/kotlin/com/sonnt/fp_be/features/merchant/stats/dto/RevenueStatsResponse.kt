@@ -10,8 +10,8 @@ class RevenueStatsResponse(
     val revenueByDay: List<DayRevenueStat>,
     val revenueByCategory: List<CategoriesRevenueStat>,
     val revenueByMenu: List<MenuRevenueStat>,
-    val mostSoldProduct: ProductDTO?,
-    val leastSoldProduct: ProductDTO?
+    val mostSoldProduct: ProductRevenueStat?,
+    val leastSoldProduct: ProductRevenueStat?
 ): BaseResponse()
 
 data class DayRevenueStat(
@@ -27,4 +27,10 @@ data class CategoriesRevenueStat(
 data class MenuRevenueStat(
     val menu: ProductMenu,
     val percentage: Double
+)
+
+data class ProductRevenueStat(
+    val product: ProductDTO,
+    val revenue: Double,
+    val count: Int
 )
