@@ -20,15 +20,31 @@ class MerchantStatsController: BaseController() {
     @Autowired
     lateinit var statsService: MerchantStatsService
 
-
     @GetMapping("revenue")
     fun getRevenueStat(
         @RequestParam fromDate: String,
         @RequestParam toDate: String
     ): ResponseEntity<*> {
-        statsService.getRevenueStats(RevenueStatsRequest(fromDate, toDate))
-        return ok()
+        val response = statsService.getRevenueStats(RevenueStatsRequest(fromDate, toDate))
+        return ok(response)
     }
 
+    @GetMapping("order")
+    fun getOrderStat(
+        @RequestParam fromDate: String,
+        @RequestParam toDate: String
+    ): ResponseEntity<*> {
+        val response = statsService.getOrderStats(RevenueStatsRequest(fromDate, toDate))
+        return ok(response)
+    }
+
+    @GetMapping("product")
+    fun getProductStat(
+        @RequestParam fromDate: String,
+        @RequestParam toDate: String
+    ): ResponseEntity<*> {
+        val response = statsService.getProductStats(RevenueStatsRequest(fromDate, toDate))
+        return ok(response)
+    }
 
 }

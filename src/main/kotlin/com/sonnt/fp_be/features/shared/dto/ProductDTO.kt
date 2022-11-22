@@ -30,6 +30,10 @@ data class ProductDTO(
             tagId?.also{ product.tag = ProductMenu(id = it) }
         }
     }
+
+    override fun hashCode(): Int {
+        return id?.toInt() ?: 0
+    }
 }
 
 data class ProductAttributeDTO(
