@@ -8,6 +8,7 @@ import com.sonnt.fp_be.model.entities.Address
 import com.sonnt.fp_be.model.entities.Driver
 import com.sonnt.fp_be.model.entities.DriverStatus
 import com.sonnt.fp_be.model.entities.order.OrderRecord
+import com.sonnt.fp_be.model.entities.order.OrderStatus
 import com.sonnt.fp_be.repos.DriverRepo
 import com.sonnt.fp_be.repos.OrderRecordRepo
 import kotlinx.coroutines.*
@@ -46,6 +47,12 @@ class FindDriverService {
                 orderTrackingService.sendNewOrderRequestToDriver(driver, orderInfo)
                 delay(15 * 1000)
                 idleDriver(driver)
+            }
+            order.status = OrderStatus.CANCELED
+
+            withContext(Dispatchers.IO) {
+                orderRecordRepo.save(order)
+                orderRecordRepo.flush()
             }
 
             orderTrackingService.sendNotSuccessFindingDriver(order)

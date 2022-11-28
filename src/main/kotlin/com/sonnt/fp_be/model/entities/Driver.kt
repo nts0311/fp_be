@@ -2,9 +2,11 @@ package com.sonnt.fp_be.model.entities
 
 import com.sonnt.fp_be.model.entities.order.OrderStatus
 import com.sonnt.fp_be.model.entities.stats.DriverStat
+import java.time.LocalDateTime
 import javax.persistence.*
 
 enum class DriverStatus(val value: String) {
+    INACTIVE("INACTIVE"),
     IDLE("IDLE"),
     QUEUE_FOR_NEW_ORDER("QUEUE_FOR_NEW_ORDER"),
     DELIVERING("DELIVERING"),
@@ -30,7 +32,9 @@ class Driver(
     @Enumerated(EnumType.STRING)
     var status: DriverStatus = DriverStatus.IDLE,
 
-    var plate: String? = null
+    var plate: String? = null,
+
+    var lastUpdateTime: LocalDateTime? = null
 
 ) {
 }

@@ -10,6 +10,7 @@ import com.sonnt.fp_be.model.entities.extension.getCustomerUsername
 import com.sonnt.fp_be.model.entities.extension.getDriverUsername
 import com.sonnt.fp_be.model.entities.extension.getMerchantUsername
 import com.sonnt.fp_be.model.entities.order.OrderRecord
+import com.sonnt.fp_be.model.entities.order.OrderStatus
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 
@@ -20,6 +21,8 @@ class OrderTrackingService: BaseService() {
     val WS_EU_ORDER_STATUS = "/ws/eu/orderStatus"
     val WS_MERCHANT_ORDER_STATUS = "/ws/merchant/orderStatus"
     val WS_MERCHANT_ORDERS = "/ws/merchant/newOrderRequest"
+
+    val WS_DRIVER_LOCATION = "/ws/eu/driverLocation"
 
     @Autowired
     private lateinit var wsMessageService: WSMessageService
@@ -93,6 +96,19 @@ class OrderTrackingService: BaseService() {
         }
     }
 
+    fun sendDriverLocation(order: OrderRecord) {
+        if (order.status != OrderStatus.DELIVERING) return
+
+        val driverLastLocation = order.driver?.lastLocation ?: return
+        val euUsername = order.getCustomerUsername() ?: return
+
+        val messageBody = DriverLocationMessage(driverLastLocation.lat, driverLastLocation.lng)
+
+        val messageToEU = WSMessageWrapper(WS_DRIVER_LOCATION, euUsername, WSMessageCode.DRIVER_LOCATION, messageBody)
+        println("Send driver location to ${euUsername}")
+        wsMessageService.sendMessage(messageToEU)
+    }
+
     fun driverCanceledOrder(order: OrderRecord) {
         val reason = "Tài xế đã huỷ đơn hàng"
         sendOrderCanceledToCustomer(order, reason)
@@ -151,4 +167,9 @@ class DriverArrivedAtMerchantMessage(
     val orderId: Long,
     val driverName: String,
     val driverPlate: String
+)
+
+class DriverLocationMessage(
+    val lat: Double,
+    val lng: Double
 )

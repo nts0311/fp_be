@@ -7,7 +7,8 @@ enum class WSMessageCode(val code: Int) {
     CANCEL_ORDER(3),
     DRIVER_ARRIVED_TO_MERCHANT(4),
     DELIVERING_ORDER_TO_CUSTOMER(5),
-    DRIVER_ARRIVED_TO_CUSTOMER(6)
+    DRIVER_ARRIVED_TO_CUSTOMER(6),
+    DRIVER_LOCATION(7)
 }
 
 data class WSMessage(val code: Int, val body: String) {

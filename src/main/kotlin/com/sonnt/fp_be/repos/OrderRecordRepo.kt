@@ -14,6 +14,10 @@ interface OrderRecordRepo: JpaRepository<OrderRecord, Long> {
     @Query(value = "SELECT * FROM orders WHERE driver_id=:driverId AND status<>'SUCCEED' AND status<>'CANCELED' LIMIT 1",
         nativeQuery = true)
     fun findActiveOrderOfDriver(driverId: Long): OrderRecord?
+
+    @Query(value = "SELECT * FROM orders WHERE driver_id=:driverId AND status='DELIVERING' LIMIT 1",
+        nativeQuery = true)
+    fun findDeliveringOrderOfDriver(driverId: Long): OrderRecord?
     @Query(value = "SELECT * FROM orders WHERE merchant_id=:merchantId AND status<>'SUCCEED' AND status<>'CANCELED'",
         nativeQuery = true)
     fun findActiveOrdersOfMerchant(merchantId: Long): List<OrderRecord>
