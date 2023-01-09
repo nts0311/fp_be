@@ -6,10 +6,8 @@ import javax.persistence.*
 @Entity
 class MerchantStat(
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     var id: Long = 0,
-    @OneToOne(fetch = FetchType.LAZY)
-    @MapsId
-    var merchant: Merchant? = null,
     var numStar: Double = 0.0,
     var numOrder: Long = 0,
     var viewCount: Long = 0

@@ -25,10 +25,13 @@ class OrderTrackingService: BaseService() {
     val WS_DRIVER_LOCATION = "/ws/eu/driverLocation"
 
     @Autowired
-    private lateinit var wsMessageService: WSMessageService
+    lateinit var wsMessageService: WSMessageService
 
     @Autowired
     lateinit var orderInfoService: OrderInfoService
+
+    @Autowired
+    lateinit var fcmService: FcmService
 
     fun onSuccessFindingDriver(order: OrderRecord) {
         val orderInfo = orderInfoService.getOrderInfo(order)
@@ -41,6 +44,7 @@ class OrderTrackingService: BaseService() {
         println("Send new order request to: ${driver.id}")
         val message = WSMessageWrapper(WS_DRIVER_ORDER_DELIVERY_REQUEST,driver.account.username, WSMessageCode.NEW_ORDER, orderInfo)
         wsMessageService.sendMessage(message)
+        fcmService.sendNotification(driver.account.fcmToken, "Đơn hàng mới", "Bạn có yêu cầu giao đơn hàng mới!")
     }
 
     fun sendNewOrderRequestToMerchant(merchant: Merchant, orderInfo: OrderInfo) {
@@ -65,6 +69,8 @@ class OrderTrackingService: BaseService() {
         val merchantUsername = orderRecord.getMerchantUsername() ?: return
         val message = WSMessageWrapper(WS_MERCHANT_ORDER_STATUS, merchantUsername, WSMessageCode.DRIVER_ARRIVED_TO_MERCHANT, body)
         wsMessageService.sendMessage(message)
+
+        fcmService.sendNotification(orderRecord.merchant?.account?.fcmToken, "Tài xế đã đến", "Tài xế cho đơn hàng #${orderRecord.id} đã đến và sẵn sàng nhận đơn.")
     }
 
     fun sendDriverDeliveringToCustomer(orderRecord: OrderRecord) {
@@ -145,7 +151,7 @@ class OrderTrackingService: BaseService() {
     }
 
     fun sendOrderCanceledToMerchant(order: OrderRecord, reason: String) {
-        val merchantUsername = order.getCustomerUsername()
+        val merchantUsername = order.getMerchantUsername()
 
         val body = CanceledOrderMessage(order.id, reason)
 

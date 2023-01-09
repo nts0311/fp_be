@@ -45,7 +45,7 @@ class FindDriverService {
             while (driverQueue.isNotEmpty()) {
                 val driver = driverQueue.removeFirst()
                 orderTrackingService.sendNewOrderRequestToDriver(driver, orderInfo)
-                delay(15 * 1000)
+                delay(60 * 1000)
                 idleDriver(driver)
             }
             order.status = OrderStatus.CANCELED

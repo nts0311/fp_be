@@ -7,6 +7,7 @@ import com.sonnt.fp_be.features.merchant.product.response.ProductResponse
 import com.sonnt.fp_be.utils.ok
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
+import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -50,6 +51,13 @@ class MerchantProductController : BaseController() {
     @PostMapping("/edit")
     fun editProduct(@RequestBody productDto: ProductDTO): ResponseEntity<*> {
         merchantProductService.editProduct(productDto)
+
+        return ok()
+    }
+
+    @PostMapping("/delete")
+    fun deleteProduct(@RequestBody productDto: ProductDTO): ResponseEntity<*> {
+        merchantProductService.deleteProduct(productDto)
 
         return ok()
     }

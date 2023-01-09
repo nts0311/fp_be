@@ -27,4 +27,6 @@ interface OrderRecordRepo: JpaRepository<OrderRecord, Long> {
     fun findDoneOrderInDay(date: String): List<OrderRecord>
 
     fun findOrderRecordByCreateDateBetweenAndStatusOrderByCreateDate(fromDateTime: LocalDateTime, toDateTime: LocalDateTime, orderStatus: OrderStatus): List<OrderRecord>
+
+    fun findOrderRecordByMerchantIdAndCreateDateBetweenAndStatusOrderByCreateDate(merchantId: Long, fromDateTime: LocalDateTime, toDateTime: LocalDateTime, orderStatus: OrderStatus): List<OrderRecord>
 }

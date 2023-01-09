@@ -12,7 +12,8 @@ fun Merchant.toItemDTO(): MerchantItemDTO = MerchantItemDTO(
         subTitle = subTitle,
         numStar =  stat?.numStar,
         numOrder = stat?.numOrder,
-        address = address
+        address = address,
+        imageUrl = account.avatarUrl
     )
 
 fun List<Merchant>.toMerchantItemList() = this.map { it.toItemDTO() }

@@ -6,11 +6,10 @@ import javax.persistence.*
 @Entity
 class DriverStat(
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     var id: Long = 0,
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @MapsId
-    var driver: Driver,
+    var numStar: Double = 0.0,
 
-    var numStar: Double
-    )
+    var numOrder: Long = 0
+)

@@ -73,7 +73,12 @@ class DriverOrderService: BaseService() {
     fun cancelOrder(orderId: Long) {
         val order = orderRepo.findById(orderId).get()
         orderService.cancelOrder(order)
-        orderTrackingService.merchantCanceledOrder(order)
+        orderTrackingService.driverCanceledOrder(order)
+        val driverId = driverRepo.findDriverIdByUserId(userId)
+        val driver = driverRepo.findById(driverId).get()
+        driver.status = DriverStatus.IDLE
+        driverRepo.flush()
+
     }
 
 }

@@ -6,6 +6,7 @@ import com.sonnt.fp_be.features.enduser.EndUserBaseService
 import com.sonnt.fp_be.features.enduser.order.model.*
 import com.sonnt.fp_be.features.enduser.order.request.CreateOrderRequest
 import com.sonnt.fp_be.features.enduser.order.request.GetOrderCheckinInfoRequest
+import com.sonnt.fp_be.features.enduser.order.request.RateOrderRequest
 import com.sonnt.fp_be.features.enduser.order.response.GetOrderCheckinInfoResponse
 import com.sonnt.fp_be.features.enduser.order.response.OrderInfo
 import com.sonnt.fp_be.features.shared.services.FindDriverService
@@ -14,11 +15,12 @@ import com.sonnt.fp_be.model.entities.extension.isOpening
 import com.sonnt.fp_be.model.entities.order.*
 import com.sonnt.fp_be.model.entities.product.ProductStatus
 import com.sonnt.fp_be.repos.AddressRepo
+import com.sonnt.fp_be.repos.DriverRepo
+import com.sonnt.fp_be.repos.MerchantRepo
 import com.sonnt.fp_be.repos.OrderRecordRepo
 import com.sonnt.fp_be.repos.product.ProductRepo
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
-import java.time.LocalTime
 
 @Service
 class EUOrderService: EndUserBaseService() {
@@ -28,6 +30,8 @@ class EUOrderService: EndUserBaseService() {
     @Autowired lateinit var addressRepo: AddressRepo
     @Autowired lateinit var findDriverService: FindDriverService
     @Autowired lateinit var orderInfoService: OrderInfoService
+    @Autowired lateinit var driverRepo: DriverRepo
+    @Autowired lateinit var merchantRepo: MerchantRepo
 
     fun getOrderCheckinInfo(request: GetOrderCheckinInfoRequest): GetOrderCheckinInfoResponse {
         val cartProducts = request.userProductSelection
@@ -119,7 +123,33 @@ class EUOrderService: EndUserBaseService() {
         return orderInfoService.getOrderInfo(orderId)
     }
 
+    fun saveRate(body: RateOrderRequest) {
+        val order = orderRepo.findById(body.orderId).get()
 
+        val driver = order.driver
+
+        driver?.stat?.also { stat ->
+
+            val totalStar = stat.numStar * stat.numOrder
+            stat.numOrder++
+            stat.numStar = (totalStar + body.driverStat.toDouble()) / stat.numOrder.toDouble()
+
+            driverRepo.save(driver)
+            driverRepo.flush()
+        }
+
+        val merchant = order.merchant
+
+        merchant?.stat?.also { stat ->
+
+            val totalStar = stat.numStar * stat.numOrder
+            stat.numOrder++
+            stat.numStar = (totalStar + body.merchantStar.toDouble()) / stat.numOrder.toDouble()
+
+            merchantRepo.save(merchant)
+            merchantRepo.flush()
+        }
+    }
 }
 
 fun Double?.safeDouble() = this ?: 0.0

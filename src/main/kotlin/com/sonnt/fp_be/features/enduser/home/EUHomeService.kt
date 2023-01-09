@@ -83,6 +83,17 @@ class EUHomeService: EndUserBaseService() {
                 merchantRepo.findMerchantsWithCategory(categoryId, searchKey, page)
         }
 
-        return listMerchant.toMerchantItemList()
+        val cord = super.customerRepo.findCustomerByAccountId(userId)?.currentAddress?.let { Cord(it.lat, it.lng) }
+
+        return if (cord != null) {
+            listMerchant.toMerchantItemList().onEach {dto ->
+                dto.address?.also { address ->
+                    dto.distance = GPSUtils.distance(cord, Cord(address.lat, address.lng))
+                }
+            }
+        } else {
+            listMerchant.toMerchantItemList()
+        }
     }
+
 }

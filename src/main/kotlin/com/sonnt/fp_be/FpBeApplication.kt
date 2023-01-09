@@ -33,7 +33,7 @@ class FpBeApplication: CommandLineRunner {
     @Autowired lateinit var menuRepo: ProductMenuRepo
 
     override fun run(vararg args: String?) {
-
+        //initFakeData()
     }
 
     fun initFakeData() {

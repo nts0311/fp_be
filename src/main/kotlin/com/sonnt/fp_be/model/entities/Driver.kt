@@ -22,8 +22,9 @@ class Driver(
     @JoinColumn(name = "account_id")
     var account: Account,
 
-    @OneToOne(fetch = FetchType.LAZY, mappedBy = "driver", cascade = [CascadeType.ALL])
-    val stat: DriverStat? = null,
+    @OneToOne(fetch = FetchType.LAZY, orphanRemoval = true, cascade = [CascadeType.ALL])
+    @JoinColumn(name = "driver_stat_id")
+    val stat: DriverStat = DriverStat(),
 
     @OneToOne(fetch = FetchType.LAZY, cascade = [CascadeType.ALL])
     @JoinColumn(name = "last_location_id")

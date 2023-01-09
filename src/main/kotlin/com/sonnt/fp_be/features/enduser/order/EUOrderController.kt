@@ -2,6 +2,7 @@ package com.sonnt.fp_be.features.enduser.order
 
 import com.sonnt.fp_be.features.enduser.order.request.CreateOrderRequest
 import com.sonnt.fp_be.features.enduser.order.request.GetOrderCheckinInfoRequest
+import com.sonnt.fp_be.features.enduser.order.request.RateOrderRequest
 import com.sonnt.fp_be.features.enduser.order.response.CreateNewOrderResponse
 import com.sonnt.fp_be.features.enduser.order.response.GetActiveOrderResponse
 import com.sonnt.fp_be.features.enduser.order.response.GetOrderCheckinInfoResponse
@@ -48,6 +49,11 @@ class EUOrderController: BaseController() {
     fun getActiveOrder(): ResponseEntity<*> {
         val orderInfo = orderService.getUserActiveOrder()
         return ok(GetActiveOrderResponse(orderInfo))
+    }
+    @PostMapping("rate")
+    fun rateOrder(@RequestBody body: RateOrderRequest): ResponseEntity<*> {
+        orderService.saveRate(body)
+        return ok()
     }
 
 }

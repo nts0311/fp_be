@@ -32,7 +32,7 @@ class MerchantStatsService: BaseMerchantService() {
         val fromDate = LocalDate.parse(request.fromDate).atStartOfDay()
         val toDate = LocalDate.parse(request.toDate).atEndOfDay()
 
-        val listOrder = orderRecordRepo.findOrderRecordByCreateDateBetweenAndStatusOrderByCreateDate(fromDate, toDate, OrderStatus.SUCCEED)
+        val listOrder = orderRecordRepo.findOrderRecordByMerchantIdAndCreateDateBetweenAndStatusOrderByCreateDate(currentMerchantId, fromDate, toDate, OrderStatus.SUCCEED) //.findOrderRecordByCreateDateBetweenAndStatusOrderByCreateDate(fromDate, toDate, OrderStatus.SUCCEED)
 
         val dayRevenues = getRevenueByDay(listOrder)
         val categoriesRevenues = getRevenueByCategory(listOrder)

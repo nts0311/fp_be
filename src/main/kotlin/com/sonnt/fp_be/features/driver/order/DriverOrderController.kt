@@ -54,8 +54,9 @@ class DriverOrderController: BaseController() {
     }
 
     @GetMapping("cancel-order")
-    fun cancelOrder(@RequestParam("orderId") orderId: Long) {
+    fun cancelOrder(@RequestParam("orderId") orderId: Long): ResponseEntity<*> {
         orderService.cancelOrder(orderId)
+        return ok()
     }
 
 }
